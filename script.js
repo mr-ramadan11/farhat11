@@ -359,7 +359,25 @@ const grammarNominalSentenceQuestions = [
   { question: "\"السماءُ صافيةٌ اليومَ\". علامة رفع المبتدأ والخبر على الترتيب:", answers: ["الفتحة - الفتحة", "الضمة - الضمة", "الألف - الألف"], correct: 1 }
 ];
 
-grammarNominalSentenceQuestions.quizTitle = "أسئلة على مراجعة على الجملة الاسمية";
+grammarNominalSentenceQuestions.quizTitle = "مراجعة على الجملة الاسمية";
+
+const spellingRulesQuestions = [
+  { question: "الكلمة التي كُتبت فيها الألف اللينة بشكل صحيح إملائياً هي:", answers: ["إلَا", "إلى", "إِلي"], correct: 1 },
+  { question: "\"وضعتُ الكتابَ ........ الطاولةِ\". الحرف المكتوب بشكل صحيح لملء الفراغ هو:", answers: ["علا", "علي", "على"], correct: 2 },
+  { question: "الحرف الذي ينتهي بألف لينة قائمة (ا) من بين الحروف التالية هو:", answers: ["لا", "حتى", "بلى"], correct: 0 },
+  { question: "\"سأجتهد في دراستي ........ أحققَ حلمي\". الحرف الصحيح إملائياً هو:", answers: ["حتا", "حتى", "حتي"], correct: 1 },
+  { question: "الجملة التي كُتبت بطريقة صحيحة إملائياً هي:", answers: ["ذهبت إِلا المدرسة مبكراً.", "ذهبت إلَى المدرسة مبكراً.", "ذهبت إِلي المدرسة مبكراً."], correct: 1 },
+  { question: "أي من الحروف الآتية يُكتب بألف قائمة (ا)؟", answers: ["حتى", "لولا", "على"], correct: 1 },
+  { question: "حرف النفي (ما) تُكتب الألف اللينة في نهايته:", answers: ["ألفاً قائمة (ا)", "على صورة الياء (ى)", "ياءً منقوطة (ي)"], correct: 0 },
+  { question: "الكلمة المكتوبة بطريقة خاطئة إملائياً في المجموعة التالية هي:", answers: ["حتّا", "كلّا", "هَيّا"], correct: 0 },
+  { question: "الحرف (يا) الخاص بالنداء، يُكتب آخره:", answers: ["ألفاً على صورة الياء (ى)", "ألفاً قائمة (ا)", "همزة على السطر (ء)"], correct: 1 },
+  { question: "\"سلمتُ ........ أصدقائي في الفصل\". الحرف الصحيح هو:", answers: ["علا", "علي", "على"], correct: 2 },
+  { question: "كل الحروف التالية تنتهي بألف لينة على صورة الياء (ى) ما عدا:", answers: ["إلى", "حتى", "هَيّا"], correct: 2 },
+  { question: "\"سافرت مع أسرتي ....... مدينةِ القاهرة\". الكلمة الصحيحة هي:", answers: ["إلى", "إلا", "إِلي"], correct: 0 },
+  { question: "الألف في نهاية الحرف (لَوْلَا) هي:", answers: ["ألف قائمة (ا)", "ألف على صورة الياء (ى)", "همزة وصل"], correct: 0 }
+];
+
+spellingRulesQuestions.quizTitle = "أسئلة على القواعد الإملائية";
 
 if (
   data["المرحلة الابتدائية"] &&
@@ -371,6 +389,7 @@ if (
   primaryGradeFourUnitOne["درس الاستماع"] = listeningTextQuestions;
   primaryGradeFourUnitOne["درس القراءة الأول"] = readingLessonQuestions;
   primaryGradeFourUnitOne["القواعد النحوية الأول"] = grammarNominalSentenceQuestions;
+  primaryGradeFourUnitOne["القواعد الإملائية"] = spellingRulesQuestions;
 }
 
 // التحكم
