@@ -1,6 +1,7 @@
 ﻿// تشغيل التطبيق
 function startApp(){
   path = [];
+  quizTitle = "";
   setActiveView("app");
   title.textContent = ROOT_TITLE;
   showMenu(data);
@@ -17,6 +18,7 @@ function openAboutPage(){
 function backToHome(){
   path = [];
   questions = [];
+  quizTitle = "";
   index = 0;
   score = 0;
   answered = false;
@@ -263,9 +265,43 @@ Object.keys(baseData).forEach((stageKey, stageIndex) => {
   };
 });
 
+const listeningTextQuestions = [
+  { question: "كيف يشعر يوسف تجاه المدرسة والدروس؟", answers: ["يكرهها", "لا يهتم بها", "يحبها كثيراً"], correct: 2 },
+  { question: "كيف استيقظ يوسف في أحد الأيام؟", answers: ["نشيطاً", "متعباً", "سعيداً"], correct: 1 },
+  { question: "بماذا نصح الطبيب يوسف؟", answers: ["بالذهاب للمدرسة", "باللعب في الخارج", "بالراحة في البيت"], correct: 2 },
+  { question: "كم المدة التي طلب الطبيب من يوسف أن يرتاح فيها؟", answers: ["يوم واحد", "عدة أيام", "شهر كامل"], correct: 1 },
+  { question: "لماذا شعر يوسف بالحزن عندما طلب منه الطبيب الراحة؟", answers: ["لأنه سيغيب عن المدرسة", "لأنه تشاجر مع صديقه", "لأنه فقد لعبته المفضلة"], correct: 0 },
+  { question: "ماذا تمنى يوسف وهو مريض في غرفته؟", answers: ["أن يسافر", "أن يستطيع متابعة الدروس من غرفته", "أن ينام طوال اليوم"], correct: 1 },
+  { question: "متى رن جرس الباب في منزل يوسف؟", answers: ["في الصباح", "في الظهيرة", "في المساء"], correct: 2 },
+  { question: "من الذي فتح باب المنزل؟", answers: ["الأب", "الأم", "يوسف"], correct: 1 },
+  { question: "من كان يقف عند الباب لزيارة يوسف؟", answers: ["المعلم", "الطبيب", "أمجد"], correct: 2 },
+  { question: "ماذا كان يحمل أمجد عندما جاء لزيارة يوسف؟", answers: ["حقيبته المدرسية", "باقة ورد", "طعاماً صحياً"], correct: 0 },
+  { question: "كيف كان رد فعل الأم عندما استأذن أمجد لزيارة يوسف؟", answers: ["منعته من الدخول", "رحبت به ودعته للدخول", "طلبت منه العودة غداً"], correct: 1 },
+  { question: "كيف شعر يوسف عندما دخل أمجد غرفته؟", answers: ["فرح برؤيته", "شعر بالغضب", "لم يهتم"], correct: 0 },
+  { question: "ما الذي تعجب منه يوسف عند رؤية أمجد؟", answers: ["لأن أمجد جاء متأخراً", "لوجود حقيبة أمجد معه في هذا الوقت", "لأن أمجد لم يحضر هدية"], correct: 1 },
+  { question: "ما هو السبب الذي جعل أمجد يحضر حقيبته؟", answers: ["ليكتب واجبه في منزل يوسف", "ليتركها عند يوسف", "ليبين ليوسف ما تعلموه اليوم حتى لا يفوته شيء"], correct: 2 },
+  { question: "ما هي اللعبة التي أحضرها أمجد ليلعبها مع يوسف؟", answers: ["كرة القدم", "ألعاب الفيديو", "لعبة الشطرنج"], correct: 2 },
+  { question: "متى كان أمجد يزور صديقه يوسف؟", answers: ["كل يوم بعد المدرسة", "في عطلة نهاية الأسبوع فقط", "مرة واحدة فقط"], correct: 0 },
+  { question: "ماذا كانت نتيجة يوسف في أول اختبار بعد عودته؟", answers: ["رسب في الاختبار", "حصل على درجات منخفضة", "حصل على درجات عالية"], correct: 2 },
+  { question: "كيف كان رد فعل المعلم تجاه درجات يوسف؟", answers: ["تعجب مبتسماً", "غضب منه", "لم يعلق على الأمر"], correct: 0 },
+  { question: "ماذا أطلق يوسف على علاقته بصديقه أمجد التي ساعدته على التفوق؟", answers: ["نافذة المدرسة", "نافذة الصداقة", "باب النجاح"], correct: 1 }
+];
+
+listeningTextQuestions.quizTitle = "أسئلة على نص الاستماع نافذة الصداقة";
+
+if (
+  data["المرحلة الابتدائية"] &&
+  data["المرحلة الابتدائية"][TERM_TWO] &&
+  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"] &&
+  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"]["الوحدة الأولى"]
+) {
+  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"]["الوحدة الأولى"]["درس الاستماع"] = listeningTextQuestions;
+}
+
 // التحكم
 let path = [];
 let questions = [];
+let quizTitle = "";
 let index = 0;
 let score = 0;
 let answered = false;
@@ -364,6 +400,7 @@ function navigate(){
   if(Array.isArray(current)){
     startQuiz(current);
   } else {
+    quizTitle = "";
     showMenu(current);
   }
 
@@ -380,6 +417,7 @@ backBtn.onclick = () => {
 // بدء الاختبار
 function startQuiz(qs){
   questions = qs;
+  quizTitle = qs.quizTitle || "";
   index = 0;
   score = 0;
   answered = false;
@@ -406,7 +444,8 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
 // تحميل سؤال
 function loadQuestion(){
   if (!questions.length) {
-    content.innerHTML = "<p>لا يوجد أسئلة بعد</p>";
+    const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+    content.innerHTML = `${headingHtml}<p>لا يوجد أسئلة بعد</p>`;
     nextBtn.style.display = "none";
     saveState();
     return;
@@ -417,7 +456,8 @@ function loadQuestion(){
   }
 
   if (index >= questions.length) {
-    content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+    const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+    content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
     nextBtn.style.display = "none";
     saveState();
     return;
@@ -428,8 +468,9 @@ function loadQuestion(){
   nextBtn.style.display = "none";
 
   const q = questions[index];
+  const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
 
-  content.innerHTML = `<h3 class="question">${q.question}</h3>`;
+  content.innerHTML = `${headingHtml}<h3 class="question">${q.question}</h3>`;
 
   q.answers.forEach((a,i) => {
     const btn = document.createElement("button");
@@ -474,7 +515,8 @@ function goToNextQuestion() {
   if(index < questions.length){
     loadQuestion();
   } else {
-    content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+    const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+    content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
     nextBtn.style.display = "none";
     saveState();
   }
@@ -489,6 +531,7 @@ nextBtn.onclick = () => {
 function restoreState(){
   // تجهيز التطبيق دائمًا من الجذر
   title.textContent = ROOT_TITLE;
+  quizTitle = "";
   showMenu(data);
   backBtn.style.display = "none";
   nextBtn.style.display = "none";
@@ -510,6 +553,7 @@ function restoreState(){
     }
 
     if (currentView === "about") {
+      quizTitle = "";
       setActiveView("about");
       return;
     }
@@ -519,6 +563,7 @@ function restoreState(){
 
       if (!path.length) {
         title.textContent = ROOT_TITLE;
+        quizTitle = "";
         showMenu(data);
         backBtn.style.display = "none";
         saveState();
@@ -531,16 +576,19 @@ function restoreState(){
 
       if (Array.isArray(current)) {
         questions = current;
+        quizTitle = questions.quizTitle || "";
         index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, Math.max(questions.length - 1, 0))) : 0;
         score = Number.isInteger(saved.score) ? Math.max(0, saved.score) : 0;
         const wasAnswered = Boolean(saved.answered);
         const savedSelectedAnswer = Number.isInteger(saved.selectedAnswer) ? saved.selectedAnswer : null;
 
         if (!questions.length) {
-          content.innerHTML = "<p>لا يوجد أسئلة بعد</p>";
+          const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+          content.innerHTML = `${headingHtml}<p>لا يوجد أسئلة بعد</p>`;
           nextBtn.style.display = "none";
         } else if (saved.finished) {
-          content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+          const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+          content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
           nextBtn.style.display = "none";
         } else {
           loadQuestion();
@@ -551,6 +599,7 @@ function restoreState(){
           }
         }
       } else {
+        quizTitle = "";
         showMenu(current);
       }
 
