@@ -287,6 +287,28 @@ button {
   box-shadow:0 10px 22px rgba(0,114,255,0.25);
 }
 
+/* Watermark */
+.watermark {
+  position:fixed;
+  inset-inline-start:clamp(10px,2vw,18px);
+  bottom:clamp(10px,2vw,18px);
+  z-index:9999;
+  pointer-events:none;
+  user-select:none;
+  font-family:"Cairo","Tajawal",sans-serif;
+  font-size:clamp(11px,1.5vw,13px);
+  font-weight:700;
+  letter-spacing:.2px;
+  color:rgba(15,23,42,0.36);
+  background:rgba(255,255,255,0.4);
+  border:1px solid rgba(148,163,184,0.28);
+  border-radius:999px;
+  padding:6px 12px;
+  box-shadow:0 6px 16px rgba(2,6,23,0.1);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+
 /* APP */
 .container {
   background:#fff;
@@ -392,6 +414,12 @@ button {
 @media (max-width:560px){
   .info-grid {
     grid-template-columns:1fr;
+  }
+
+  .watermark {
+    padding:5px 10px;
+    font-size:11px;
+    color:rgba(15,23,42,0.32);
   }
 
   .controls {
