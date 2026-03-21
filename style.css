@@ -140,35 +140,67 @@ button {
 .about-page {
   min-height:100dvh;
   padding:clamp(22px,4vw,44px) clamp(12px,3vw,20px);
-  background:#f4f6f9;
+  background:
+    radial-gradient(circle at 20% 20%, #e8f0ff 0%, rgba(232,240,255,0) 42%),
+    radial-gradient(circle at 80% 10%, #e6fff7 0%, rgba(230,255,247,0) 36%),
+    #f4f6f9;
 }
 
 .about-wrapper {
   width:min(100%,1100px);
   margin-inline:auto;
   text-align:center;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  border-radius:20px;
+  padding:clamp(16px,3vw,28px);
+  box-shadow:0 18px 38px rgba(15,23,42,0.08);
+}
+
+.about-wrapper > h2 {
+  margin-bottom:clamp(16px,2.5vw,24px);
+  color:#0f4c97;
+  letter-spacing:.2px;
 }
 
 .info-grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));
-  gap:15px;
+  gap:18px;
   max-width:1000px;
   margin-inline:auto;
   align-items:start;
 }
 
 .card {
-  background:#fff;
+  background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   padding:clamp(14px,2vw,20px);
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  border-radius:14px;
+  border:1px solid #dfe7f3;
+  box-shadow:0 8px 22px rgba(2,32,71,0.08);
   transition:.25s;
+  text-align:right;
+}
+
+.card h4 {
+  color:#0f4c97;
+  margin-bottom:10px;
+}
+
+.card p {
+  margin:0;
+  line-height:1.8;
+  color:#374151;
+}
+
+.card p + p {
+  margin-top:6px;
 }
 
 @media (hover:hover) {
   .card:hover {
-    transform:translateY(-5px);
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(2,32,71,0.12);
   }
 }
 
@@ -182,12 +214,19 @@ button {
 
 .skills-list {
   margin-top:8px;
-  padding-right:20px;
+  padding:0;
+  list-style:none;
   line-height:1.8;
 }
 
 .skills-list li {
-  margin-bottom:4px;
+  margin-bottom:8px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid #dbe6f5;
+  background:#f6f9ff;
+  font-weight:600;
+  color:#1f2937;
 }
 
 @media (min-width:900px){
@@ -206,10 +245,10 @@ button {
 }
 
 .course-list li {
-  padding:10px;
-  border:1px solid #e2e8f0;
+  padding:12px;
+  border:1px solid #d9e4f3;
   border-radius:10px;
-  background:#f8f9fa;
+  background:#f8fbff;
   margin-bottom:10px;
   line-height:1.7;
   text-align:center;
@@ -218,6 +257,7 @@ button {
 
 .course-list strong {
   display:block;
+  color:#0f172a;
 }
 
 .course-list a {
@@ -236,6 +276,7 @@ button {
 .about-home-btn {
   margin:20px auto 0;
   max-width:280px;
+  box-shadow:0 10px 22px rgba(0,114,255,0.25);
 }
 
 /* APP */
