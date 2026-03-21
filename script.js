@@ -1,12 +1,22 @@
-// تشغيل التطبيق
-function startApp(){
-  document.querySelector(".hero").style.display="none";
-  document.querySelector(".about").style.display="none";
-  document.getElementById("app").style.display="block";
-  document.getElementById("homeBtn").style.display="block"; // إظهار زر الرئيسية
+// ============================================
+// 1. إعداد النافذة المنبثقة (المعلومات المهنية)
+// ============================================
+function openInfoModal() {
+  document.getElementById("infoModal").style.display = "flex";
+}
+function closeInfoModal() {
+  document.getElementById("infoModal").style.display = "none";
+}
+window.onclick = function(event) {
+  const modal = document.getElementById("infoModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }
 
-// 🔥 إنشاء الدروس داخل كل وحدة
+// ============================================
+// 2. هيكلة البيانات (الصفوف والوحدات والترميز)
+// ============================================
 function createLessons(){
   return {
     "درس الاستماع": {},
@@ -23,35 +33,58 @@ function createLessons(){
   };
 }
 
-// 🔥 إنشاء الوحدات
+function createUnit3() {
+  return {
+    "درس الاستماع": {},
+    "درس القراءة الأول": {},
+    "القواعد النحوية الأول": {},
+    "تطبيق على القواعد الإملائية": {},
+    "تطبيق على التعبير الكتابي": {},
+    "درس القراءة الثاني": {},
+    "القواعد النحوية الثاني": {},
+    "تطبيق على القواعد الإملائية 2": {},
+    "تطبيق على التعبير الكتابي 2": {},
+    "النص الشعري": {},
+    "مراجعة": {}
+  };
+}
+
 function createUnits(){
   return {
     "الوحدة الأولى": createLessons(),
     "الوحدة الثانية": createLessons(),
-    "الوحدة الثالثة": createLessons()
+    "الوحدة الثالثة": createUnit3()
   };
 }
 
-// 🔥 المرحلة الابتدائية
+function createPrimaryGrades() {
+  return {
+    "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits(),
+    "الصف الرابع": createUnits(), "الصف الخامس": createUnits(), "الصف السادس": createUnits()
+  };
+}
+
+function createPrepGrades() {
+  return {
+    "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits()
+  };
+}
+
+// تقسيم المراحل إلى ترم أول وترم ثاني
 const primary = {
-  "الصف الأول": createUnits(),
-  "الصف الثاني": createUnits(),
-  "الصف الثالث": createUnits(),
-  "الصف الرابع": createUnits(),
-  "الصف الخامس": createUnits(),
-  "الصف السادس": createUnits()
+  "الترم الأول": createPrimaryGrades(),
+  "الترم الثاني": createPrimaryGrades()
 };
 
-// 🔥 المرحلة الإعدادية
 const prep = {
-  "الصف الأول": createUnits(),
-  "الصف الثاني": createUnits(),
-  "الصف الثالث": createUnits()
+  "الترم الأول": createPrepGrades(),
+  "الترم الثاني": createPrepGrades()
 };
 
-// ✅ إضافة الأسئلة الشاملة للمراجعة
-primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = [
-    // --- النص الشعري ---
+// ============================================
+// 3. بنك الأسئلة (الصف الرابع - الترم الثاني)
+// ============================================
+primary["الترم الثاني"]["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = [
     { question: 'مضاد كلمة "الوجود"', answers: ["الحياة", "البقاء", "العدم"], correct: 2 },
     { question: 'المراد بـ "قائمون" في النص', answers: ["نائمون", "جالسون", "مستمرون في رعايتها"], correct: 2 },
     { question: 'الكلمات (الفنون - الأولون) لها نهايات متماثلة تعطي:', answers: ["تضاداً", "جرساً موسيقياً يطرب الأذن", "ترادفاً"], correct: 1 },
@@ -80,8 +113,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: '"مصر أولى بالفداء" تعني أنها:', answers: ["أحق بالتضحية", "لا تحتاج تضحية", "أبعد عن التضحية"], correct: 0 },
     { question: 'معنى "ندين":', answers: ["نأخذ ديناً", "نعترف ونلتزم", "نرفض"], correct: 1 },
     { question: 'من قائل النص مصر لنا منذ القدم؟', answers: ["أحمد محرم", "أحمد شوقي", "حافظ إبراهيم"], correct: 0 },
-
-    // --- نص الاستماع ---
     { question: 'لماذا شعر يوسف بالحزن عندما استيقظ متعباً ونصحه الطبيب بالراحة؟', answers: ["لأنه سيغيب عن رحلة عائلية.", "لأنه سيغيب عن المدرسة التي يحبها.", "لأنه لا يحب البقاء في سريره."], correct: 1 },
     { question: 'مَن الذي زار يوسف في المساء؟', answers: ["صديقه أمجد.", "معلم الفصل.", "طبيب الأسرة."], correct: 0 },
     { question: 'ما هو الهدف الأساسي من زيارة أمجد لصديقه المريض؟', answers: ["ليلعب معه ألعاب الفيديو الجديدة.", "ليطمئن عليه ويشرح له ما فاته من دروس.", "ليطلب منه المساعدة في واجباته."], correct: 1 },
@@ -90,8 +121,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'ماذا كانت نتيجة يوسف في أول اختبار له بعد عودته إلى المدرسة؟', answers: ["حصل على درجات عالية.", "حصل على درجات متوسطة.", "لم يستطع الإجابة عن الأسئلة."], correct: 0 },
     { question: 'لماذا تعجب المعلم من نتيجة يوسف في الاختبار؟', answers: ["لأن الاختبار كان صعباً جداً على جميع الطلاب.", "لأن يوسف كان غائباً ولم يتوقع المعلم هذا التفوق.", "لأن يوسف أجاب بسرعة كبيرة."], correct: 1 },
     { question: 'ماذا قصد يوسف بجملة "نافذة اسمها الصداقة"؟', answers: ["أن غرفته بها نافذة حقيقية تطل على مدرسته.", "أن أمجد كان طريقه لمعرفة كل ما يحدث في المدرسة أثناء غيابه.", "أن المدرسة بها نوافذ كبيرة وجميلة."], correct: 1 },
-
-    // --- نص فكر قبل أن تنشر ---
     { question: 'لماذا كانت الطفلة الصغيرة تبكي عندما تقترب الفراشات من شعرها؟', answers: ["لأنها كانت تخاف منها كثيراً.", "لأنها أرادت الإمساك بها ولم تستطع.", "لأن الفراشات كانت تزعجها بصوتها."], correct: 0 },
     { question: 'كيف استطاعت الأم أن تحول خوف ابنتها من الفراشات إلى حب؟', answers: ["بإبعاد الفراشات عنها تماماً.", "بإخبارها بكلمات لطيفة أن الفراشات تقف فقط على الأشياء الجميلة مثل شعرها.", "بشراء لعبة جديدة على شكل فراشة."], correct: 1 },
     { question: 'ما الصعوبة التي واجهت الطفل أثناء مشاركته في اليوم الرياضي؟', answers: ["الجري لمسافات طويلة.", "القفز فوق الحواجز.", "الالتقاط الكرة من زملائه."], correct: 1 },
@@ -100,8 +129,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'بم شبه الكاتب الكلمة الطيبة في نهاية النص؟', answers: ["بالسيف الجارح.", "بالدواء الشافي.", "بالحاجز العالي."], correct: 1 },
     { question: 'بالاستعانة بقائمة المفردات، ما المراد بعبارة "تُطْفِئُ بَرِيقَ قَلْبِهِ"؟', answers: ["تجعله يشعر بالنعاس الشديد.", "تحزنه", "تجعله ينسى ما كان يفعله."], correct: 1 },
     { question: 'لماذا ينصحنا الكاتب باختيار كلماتنا بعناية شديدة؟', answers: ["لأن الكلمات الجميلة سهلة في الكتابة والقراءة.", "لأن الكلمة الطيبة قد تغير حياة إنسان للأفضل، بينما الجارحة تؤذيه.", "لكي نبدو أذكياء أمام أصدقائنا ومعلمينا."], correct: 1 },
-
-    // --- درس كلمات تبني وكلمات تهدم ---
     { question: 'أين كان الأصدقاء يلعبون وقت الفسحة في درس "كلمات تبني وكلمات تهدم"؟', answers: ["في حديقة الحي", "في فناء المدرسة", "في الفصل الدراسي"], correct: 1 },
     { question: 'في درس "كلمات تبني وكلمات تهدم"، ماذا فعل عمر عندما رأى صديقه يحمل حقيبته بطريقة غريبة؟', answers: ["ساعده في حمل الحقيبة لتخفيف العبء عنه", "بدأ يقلده بطريقة مضحكة", "تجاهله تماما وذهب ليلعب مع فريق آخر"], correct: 1 },
     { question: 'ماذا سألت المعلمة عمر عندما لاحظت ما حدث في درس "كلمات تبني وكلمات تهدم"؟', answers: ["هل كنت تقصد أن تضحك معه أم أن تضحك عليه؟", "لماذا لم تحضر أدواتك المدرسية اليوم يا عمر؟", "من الذي بدأ بإثارة الفوضى في الفناء؟"], correct: 0 },
@@ -109,8 +136,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'من هو "الشخص الذكي" كما وصفته المعلمة في درس "كلمات تبني وكلمات تهدم"؟', answers: ["الذي يسعد من حوله بتصرفاته", "الذي يحصل دائما على الدرجات النهائية في الاختبارات", "الذي يستطيع الجري أسرع من زملائه في الفناء"], correct: 0 },
     { question: 'ماذا فعل عمر ليصلح خطأه مع صديقه في نهاية درس "كلمات تبني وكلمات تهدم"؟', answers: ["طلب من المعلمة أن تعتذر للصديق نيابة عنه", "اقترب منه، واعتذر له، وطلب أن يسامحه", "أعطى صديقه بعض الحلوى دون أن يتحدث معه"], correct: 1 },
     { question: 'على ماذا اتفق الأصدقاء في نهاية درس "كلمات تبني وكلمات تهدم"؟', answers: ["أن الضحك الجميل هو الذي يسعد الجميع دون تنمر أو مضايقة", "ألا يضحكوا أو يمزحوا أبدا داخل المدرسة", "أن يقلدوا بعضهم البعض كل يوم في الفسحة"], correct: 0 },
-
-    // --- أسئلة الجملة الاسمية (المبتدأ والخبر) ---
     { question: '"أصوات العصافير في الصباح الباكر لحن جميل". كلمة (أصوات) مبتدأ مرفوع بالضمة لأنه:', answers: ["جمع مؤنث سالم", "جمع تكسير", "مفرد"], correct: 1 },
     { question: '"إلقاء القمامة في غير مكانها عمل قبيح". الخبر في الجملة السابقة هو:', answers: ["القمامة", "مكانها", "عمل"], correct: 2 },
     { question: '"المساكين محتاجون إلى العطف والمساعدة دائما". كلمة (المساكين) مبتدأ مرفوع بالضمة لأنه:', answers: ["جمع مذكر سالم", "جمع تكسير", "مثنى"], correct: 1 },
@@ -131,8 +156,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: '"السلاطين في العصور القديمة حكام أقوياء". كلمة (السلاطين) مبتدأ مرفوع بالضمة لأنه:', answers: ["جمع مذكر سالم", "جمع تكسير", "مثنى"], correct: 1 },
     { question: '"الفساتين الجديدة في المعرض رائعة جدا". كلمة (الفساتين) مبتدأ مرفوع بالضمة لأنه:', answers: ["جمع مذكر سالم", "مثنى", "جمع تكسير"], correct: 2 },
     { question: '"الطالب المجتهد في دروسه طوال العام ناجح". الخبر في الجملة السابقة هو:', answers: ["المجتهد", "دروسه", "ناجح"], correct: 2 },
-
-    // --- أسئلة الجملة الفعلية (الفعل والفاعل) ---
     { question: 'يشرح الدرس ببراعة واهتمام المعلم المتميز. الفاعل في الجملة السابقة هو:', answers: ["الدرس", "ببراعة", "المعلم"], correct: 2 },
     { question: 'يعيش المساكين في ظروف صعبة ويحتاجون للمساعدة. الفاعل مرفوع وعلامة رفعه:', answers: ["الياء", "الواو", "الضمة"], correct: 2 },
     { question: 'يحمي الوطن من الأعداء الطامعين جنود شجعان. الفاعل في الجملة هو:', answers: ["الوطن", "الأعداء", "جنود"], correct: 2 },
@@ -154,8 +177,6 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'استقبل الضيوف في الحفل الكبير المضيفون بترحاب. الفاعل "المضيفون" مرفوع وعلامة رفعه:', answers: ["الواو", "الضمة", "النون"], correct: 0 },
     { question: 'اشتركت الطالبات المتميزات في المسابقة. علامة رفع الفاعل هي:', answers: ["الألف", "الكسرة", "الضمة"], correct: 2 },
     { question: 'تغرد العصافير فوق أغصان الأشجار العالية. الفاعل مرفوع وعلامة رفعه:', answers: ["الياء", "الواو", "الضمة"], correct: 2 },
-
-    // --- الألف اللينة في الأسماء ---
     { question: 'توكأ جدي على ...... غليظة أثناء مشيه في الحديقة.', answers: ["عصى", "عصا", "عصاء"], correct: 1 },
     { question: 'كرم مدير المدرسة الطالب ...... لتفوقه في المسابقة.', answers: ["مصطفا", "مصطفي", "مصطفى"], correct: 2 },
     { question: 'ناقش المحامي ...... مهمة جدا في ساحة المحكمة.', answers: ["قضايا", "قضايى", "قضائي"], correct: 0 },
@@ -167,71 +188,60 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'سأل المعلم الطلاب: ...... موعد بداية الاختبار النهائي؟', answers: ["متا", "متى", "متي"], correct: 1 },
     { question: 'قدمت الإدارة ...... قيمة للأطفال في الـ ......', answers: ["هدايى / مستشفا", "هدايا / مستشفى", "هدايا / مستشفا"], correct: 1 }
 ];
- 
-// ✨ تعديل الوحدة الثالثة (المرحلة الابتدائية)
-Object.keys(primary).forEach(grade => {
-  primary[grade]["الوحدة الثالثة"] = {
-    "درس الاستماع": {},
-    "درس القراءة الأول": {},
-    "القواعد النحوية الأول": {},
-    "تطبيق على القواعد الإملائية": {},
-    "تطبيق على التعبير الكتابي": {},
-    "درس القراءة الثاني": {},
-    "القواعد النحوية الثاني": {},
-    "تطبيق على القواعد الإملائية 2": {},
-    "تطبيق على التعبير الكتابي 2": {},
-    "النص الشعري": {},
-    "مراجعة": {}
-  };
-});
-  
-// ✨ تعديل الوحدة الثالثة (المرحلة الإعدادية)
 
-Object.keys(prep).forEach(grade => {
-  prep[grade]["الوحدة الثالثة"] = {
-    "درس الاستماع": {},
-    "درس القراءة الأول": {},
-    "القواعد النحوية الأول": {},
-    "تطبيق على القواعد الإملائية": {},
-    "تطبيق على التعبير الكتابي": {},
-    "درس القراءة الثاني": {},
-    "القواعد النحوية الثاني": {},
-    "تطبيق على القواعد الإملائية 2": {},
-    "تطبيق على التعبير الكتابي 2": {},
-    "النص الشعري": {},
-    "مراجعة": {}
-  };
-});
-// النهائي
 const data = {
   "المرحلة الابتدائية": primary,
   "المرحلة الإعدادية": prep
 };
 
-// 🧠 التحكم
+// ============================================
+// 4. التحكم وحفظ المسار (Session Storage)
+// ============================================
 let path = [];
 let questions = [];
 let index = 0;
 let score = 0;
 let answered = false;
 
-// عناصر الصفحة
 const title = document.getElementById("title");
 const content = document.getElementById("content");
 const nextBtn = document.getElementById("nextBtn");
 const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
+const heroSection = document.getElementById("heroSection");
+const appSection = document.getElementById("app");
 
-// زر الصفحة الرئيسية
+// حفظ المسار في الذاكرة
+function saveState() {
+  sessionStorage.setItem("savedPath", JSON.stringify(path));
+  sessionStorage.setItem("savedIndex", index);
+  sessionStorage.setItem("savedScore", score);
+}
+
+// مسح المسار من الذاكرة
+function clearState() {
+  sessionStorage.removeItem("savedPath");
+  sessionStorage.removeItem("savedIndex");
+  sessionStorage.removeItem("savedScore");
+}
+
+function startApp(){
+  heroSection.style.display="none";
+  appSection.style.display="block";
+  homeBtn.style.display="block";
+  path = []; // البداية من الصفر
+  saveState();
+  showMenu(data);
+}
+
 homeBtn.onclick = () => {
-  path = []; // تفريغ المسار
-  document.getElementById("app").style.display = "none";
-  document.querySelector(".hero").style.display = "flex";
-  document.querySelector(".about").style.display = "block";
-  showMenu(data); // إعادة تعيين القائمة
+  clearState();
+  path = [];
+  appSection.style.display = "none";
+  heroSection.style.display = "flex";
+  showMenu(data); 
 };
 
-// عرض القوائم
 function showMenu(obj){
   content.innerHTML="";
   nextBtn.style.display="none";
@@ -249,6 +259,7 @@ function showMenu(obj){
 
     btn.onclick = () => {
       path.push(k);
+      saveState(); // حفظ بعد التحديث
       navigate();
     };
 
@@ -256,59 +267,67 @@ function showMenu(obj){
   });
 }
 
-// التنقل
 function navigate(){
   let current = data;
 
   path.forEach(p => {
-    current = current[p];
+    if(current[p]) { current = current[p]; }
   });
 
   title.textContent = path.join(" > ");
 
   if(Array.isArray(current)){
-    startQuiz(current);
+    // إذا لم نكن في وضع اختبار سابقاً، نبدأ من جديد
+    if (!questions.length || questions !== current) {
+      startQuiz(current);
+    } else {
+      // إذا كنا نكمل اختبار تم تحميله
+      if(index >= questions.length){
+         finishQuiz();
+      } else {
+         loadQuestion();
+      }
+    }
   } else {
+    questions = []; // لسنا في اختبار
     showMenu(current);
   }
 
   backBtn.style.display = path.length ? "block" : "none";
 }
 
-// رجوع
 backBtn.onclick = () => {
   path.pop();
+  questions = []; // إلغاء الاختبار عند الرجوع
+  saveState();
   navigate();
 };
 
-// بدء الاختبار
 function startQuiz(qs){
   questions = qs;
   index = 0;
   score = 0;
+  saveState();
   loadQuestion();
 }
 
-// تحميل سؤال
 function loadQuestion(){
   answered = false;
-  nextBtn.style.display = "none"; // إخفاء زر التالي في البداية
+  nextBtn.style.display = "none";
 
   const q = questions[index];
+  if(!q) return;
 
   content.innerHTML = `<h3 class="question">${q.question}</h3>`;
 
   q.answers.forEach((a,i)=>{
     const btn = document.createElement("button");
     btn.textContent = a;
-
     btn.onclick = () => selectAnswer(i);
-
     content.appendChild(btn);
   });
 }
 
-// اختيار الإجابة
 function selectAnswer(i){
   if(answered) return;
   answered = true;
@@ -317,44 +336,70 @@ function selectAnswer(i){
   const btns = document.querySelectorAll("#content button");
 
   btns.forEach((b,idx)=>{
-    if(idx === correct){
-      b.classList.add("correct"); // تلوين الإجابة الصحيحة بالأخضر
-    } else if(idx === i){
-      b.classList.add("wrong"); // تلوين إجابة الطالب بالأحمر إذا أخطأ
-    }
-    b.disabled = true; // تعطيل الأزرار
+    if(idx === correct){ b.classList.add("correct"); } 
+    else if(idx === i){ b.classList.add("wrong"); }
+    b.disabled = true;
   });
 
   if(i === correct) {
     score++;
-    // انتقال تلقائي بعد الإجابة الصحيحة (بزمن قدره ثانية واحدة)
-    setTimeout(() => {
-      goToNextQuestion();
-    }, 1000);
+    saveState();
+    setTimeout(() => { goToNextQuestion(); }, 1000);
   } else {
-    // إظهار زر "التالي" إذا كانت الإجابة خاطئة
     nextBtn.style.display = "block";
   }
 }
 
-// دالة الانتقال للسؤال التالي
 function goToNextQuestion() {
   index++;
+  saveState();
 
   if(index < questions.length){
     loadQuestion();
   } else {
-    // عرض النتيجة النهائية
-    content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
-    nextBtn.style.display = "none";
+    finishQuiz();
   }
 }
 
-// زر التالي (يعمل فقط في حال ظهور الزر للإجابات الخاطئة)
+function finishQuiz() {
+    content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+    nextBtn.style.display = "none";
+}
+
 nextBtn.onclick = () => {
   if(!answered) return;
   goToNextQuestion();
 };
 
-// بدء التطبيق
-showMenu(data);
+// ============================================
+// 5. التحقق عند إعادة تحميل الصفحة (Refresh)
+// ============================================
+window.onload = () => {
+  const savedPath = sessionStorage.getItem("savedPath");
+  
+  if (savedPath) {
+    path = JSON.parse(savedPath);
+    if (path.length > 0) {
+      heroSection.style.display = "none";
+      appSection.style.display = "block";
+      homeBtn.style.display = "block";
+      
+      // استرجاع الدرجة ومكان السؤال إذا كان في اختبار
+      index = parseInt(sessionStorage.getItem("savedIndex")) || 0;
+      score = parseInt(sessionStorage.getItem("savedScore")) || 0;
+      
+      let current = data;
+      path.forEach(p => { if(current[p]) current = current[p]; });
+      
+      if(Array.isArray(current)){
+          questions = current;
+      }
+
+      navigate();
+    } else {
+      showMenu(data);
+    }
+  } else {
+    showMenu(data);
+  }
+};
