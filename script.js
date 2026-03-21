@@ -1,18 +1,4 @@
-// ============================================
-// 1. إعداد النافذة المنبثقة (المعلومات المهنية)
-// ============================================
-function openInfoModal() {
-  document.getElementById("infoModal").style.display = "flex";
-}
-function closeInfoModal() {
-  document.getElementById("infoModal").style.display = "none";
-}
-window.onclick = function(event) {
-  const modal = document.getElementById("infoModal");
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+
 
 // ============================================
 // 2. هيكلة البيانات (الصفوف والوحدات والترميز)
