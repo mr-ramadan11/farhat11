@@ -1,75 +1,64 @@
+// التحكم في ظهور وإخفاء الأقسام
+const heroSection = document.getElementById("heroSection");
+const infoSection = document.getElementById("infoSection");
+const appSection = document.getElementById("appSection");
 
+function showHome() {
+  heroSection.style.display = "flex";
+  infoSection.style.display = "none";
+  appSection.style.display = "none";
+  clearState();
+  path = [];
+}
 
-// ============================================
-// 2. هيكلة البيانات (الصفوف والوحدات والترميز)
-// ============================================
+function showInfo() {
+  heroSection.style.display = "none";
+  appSection.style.display = "none";
+  infoSection.style.display = "block";
+}
+
+function startApp() {
+  heroSection.style.display = "none";
+  infoSection.style.display = "none";
+  appSection.style.display = "block";
+  document.getElementById("homeBtn").style.display = "block";
+  path = []; 
+  saveState();
+  showMenu(data);
+}
+
+// هيكلة البيانات والمناهج
 function createLessons(){
   return {
-    "درس الاستماع": {},
-    "درس القراءة الأول": {},
-    "القواعد النحوية الأول": {},
-    "القواعد الإملائية": {},
-    "التعبير الكتابي": {},
-    "درس القراءة الثاني": {},
-    "القواعد النحوية الثاني": {},
-    "تطبيق على القواعد الإملائية": {},
-    "تطبيق على التعبير الكتابي": {},
-    "النص الشعري": {},
-    "مراجعة": {}
+    "درس الاستماع": {}, "درس القراءة الأول": {}, "القواعد النحوية الأول": {},
+    "القواعد الإملائية": {}, "التعبير الكتابي": {}, "درس القراءة الثاني": {},
+    "القواعد النحوية الثاني": {}, "تطبيق على القواعد الإملائية": {},
+    "تطبيق على التعبير الكتابي": {}, "النص الشعري": {}, "مراجعة": {}
   };
 }
 
 function createUnit3() {
   return {
-    "درس الاستماع": {},
-    "درس القراءة الأول": {},
-    "القواعد النحوية الأول": {},
-    "تطبيق على القواعد الإملائية": {},
-    "تطبيق على التعبير الكتابي": {},
-    "درس القراءة الثاني": {},
-    "القواعد النحوية الثاني": {},
-    "تطبيق على القواعد الإملائية 2": {},
-    "تطبيق على التعبير الكتابي 2": {},
-    "النص الشعري": {},
-    "مراجعة": {}
+    "درس الاستماع": {}, "درس القراءة الأول": {}, "القواعد النحوية الأول": {},
+    "تطبيق على القواعد الإملائية": {}, "تطبيق على التعبير الكتابي": {},
+    "درس القراءة الثاني": {}, "القواعد النحوية الثاني": {},
+    "تطبيق على القواعد الإملائية 2": {}, "تطبيق على التعبير الكتابي 2": {},
+    "النص الشعري": {}, "مراجعة": {}
   };
 }
 
-function createUnits(){
-  return {
-    "الوحدة الأولى": createLessons(),
-    "الوحدة الثانية": createLessons(),
-    "الوحدة الثالثة": createUnit3()
-  };
-}
+function createUnits(){ return { "الوحدة الأولى": createLessons(), "الوحدة الثانية": createLessons(), "الوحدة الثالثة": createUnit3() }; }
 
 function createPrimaryGrades() {
-  return {
-    "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits(),
-    "الصف الرابع": createUnits(), "الصف الخامس": createUnits(), "الصف السادس": createUnits()
-  };
+  return { "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits(), "الصف الرابع": createUnits(), "الصف الخامس": createUnits(), "الصف السادس": createUnits() };
 }
 
-function createPrepGrades() {
-  return {
-    "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits()
-  };
-}
+function createPrepGrades() { return { "الصف الأول": createUnits(), "الصف الثاني": createUnits(), "الصف الثالث": createUnits() }; }
 
-// تقسيم المراحل إلى ترم أول وترم ثاني
-const primary = {
-  "الترم الأول": createPrimaryGrades(),
-  "الترم الثاني": createPrimaryGrades()
-};
+const primary = { "الترم الأول": createPrimaryGrades(), "الترم الثاني": createPrimaryGrades() };
+const prep = { "الترم الأول": createPrepGrades(), "الترم الثاني": createPrepGrades() };
 
-const prep = {
-  "الترم الأول": createPrepGrades(),
-  "الترم الثاني": createPrepGrades()
-};
-
-// ============================================
-// 3. بنك الأسئلة (الصف الرابع - الترم الثاني)
-// ============================================
+// بنك الأسئلة (الصف الرابع - الترم الثاني)
 primary["الترم الثاني"]["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = [
     { question: 'مضاد كلمة "الوجود"', answers: ["الحياة", "البقاء", "العدم"], correct: 2 },
     { question: 'المراد بـ "قائمون" في النص', answers: ["نائمون", "جالسون", "مستمرون في رعايتها"], correct: 2 },
@@ -175,217 +164,105 @@ primary["الترم الثاني"]["الصف الرابع"]["الوحدة الأ
     { question: 'قدمت الإدارة ...... قيمة للأطفال في الـ ......', answers: ["هدايى / مستشفا", "هدايا / مستشفى", "هدايا / مستشفا"], correct: 1 }
 ];
 
-const data = {
-  "المرحلة الابتدائية": primary,
-  "المرحلة الإعدادية": prep
-};
+const data = { "المرحلة الابتدائية": primary, "المرحلة الإعدادية": prep };
 
-// ============================================
-// 4. التحكم وحفظ المسار (Session Storage)
-// ============================================
-let path = [];
-let questions = [];
-let index = 0;
-let score = 0;
-let answered = false;
+// نظام المنصة
+let path = []; let questions = []; let index = 0; let score = 0; let answered = false;
 
 const title = document.getElementById("title");
 const content = document.getElementById("content");
 const nextBtn = document.getElementById("nextBtn");
 const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
-const heroSection = document.getElementById("heroSection");
-const appSection = document.getElementById("app");
 
-// حفظ المسار في الذاكرة
 function saveState() {
   sessionStorage.setItem("savedPath", JSON.stringify(path));
   sessionStorage.setItem("savedIndex", index);
   sessionStorage.setItem("savedScore", score);
 }
 
-// مسح المسار من الذاكرة
 function clearState() {
   sessionStorage.removeItem("savedPath");
   sessionStorage.removeItem("savedIndex");
   sessionStorage.removeItem("savedScore");
 }
 
-function startApp(){
-  heroSection.style.display="none";
-  appSection.style.display="block";
-  homeBtn.style.display="block";
-  path = []; // البداية من الصفر
-  saveState();
-  showMenu(data);
-}
-
-homeBtn.onclick = () => {
-  clearState();
-  path = [];
-  appSection.style.display = "none";
-  heroSection.style.display = "flex";
-  showMenu(data); 
-};
+homeBtn.onclick = showHome;
 
 function showMenu(obj){
-  content.innerHTML="";
-  nextBtn.style.display="none";
-
+  if(!content) return;
+  content.innerHTML=""; nextBtn.style.display="none";
   const keys = Object.keys(obj);
-
-  if(keys.length === 0){
-    content.innerHTML="<p>لا يوجد محتوى بعد</p>";
-    return;
-  }
+  if(keys.length === 0){ content.innerHTML="<p>لا يوجد محتوى بعد</p>"; return; }
 
   keys.forEach(k=>{
-    const btn = document.createElement("button");
-    btn.textContent = k;
-
-    btn.onclick = () => {
-      path.push(k);
-      saveState(); // حفظ بعد التحديث
-      navigate();
-    };
-
+    const btn = document.createElement("button"); btn.textContent = k;
+    btn.onclick = () => { path.push(k); saveState(); navigate(); };
     content.appendChild(btn);
   });
 }
 
 function navigate(){
   let current = data;
-
-  path.forEach(p => {
-    if(current[p]) { current = current[p]; }
-  });
-
-  title.textContent = path.join(" > ");
+  path.forEach(p => { if(current[p]) current = current[p]; });
+  if(title) title.textContent = path.join(" > ");
 
   if(Array.isArray(current)){
-    // إذا لم نكن في وضع اختبار سابقاً، نبدأ من جديد
-    if (!questions.length || questions !== current) {
-      startQuiz(current);
-    } else {
-      // إذا كنا نكمل اختبار تم تحميله
-      if(index >= questions.length){
-         finishQuiz();
-      } else {
-         loadQuestion();
-      }
-    }
+    if (!questions.length || questions !== current) { startQuiz(current); } 
+    else { if(index >= questions.length){ finishQuiz(); } else { loadQuestion(); } }
   } else {
-    questions = []; // لسنا في اختبار
-    showMenu(current);
+    questions = []; showMenu(current);
   }
-
-  backBtn.style.display = path.length ? "block" : "none";
+  if(backBtn) backBtn.style.display = path.length ? "block" : "none";
 }
 
-backBtn.onclick = () => {
-  path.pop();
-  questions = []; // إلغاء الاختبار عند الرجوع
-  saveState();
-  navigate();
-};
+if(backBtn) { backBtn.onclick = () => { path.pop(); questions = []; saveState(); navigate(); }; }
 
-function startQuiz(qs){
-  questions = qs;
-  index = 0;
-  score = 0;
-  saveState();
-  loadQuestion();
-}
+function startQuiz(qs){ questions = qs; index = 0; score = 0; saveState(); loadQuestion(); }
 
 function loadQuestion(){
-  answered = false;
-  nextBtn.style.display = "none";
-
-  const q = questions[index];
-  if(!q) return;
-
+  answered = false; nextBtn.style.display = "none";
+  const q = questions[index]; if(!q) return;
   content.innerHTML = `<h3 class="question">${q.question}</h3>`;
-
   q.answers.forEach((a,i)=>{
-    const btn = document.createElement("button");
-    btn.textContent = a;
-    btn.onclick = () => selectAnswer(i);
-    content.appendChild(btn);
+    const btn = document.createElement("button"); btn.textContent = a;
+    btn.onclick = () => selectAnswer(i); content.appendChild(btn);
   });
 }
 
 function selectAnswer(i){
-  if(answered) return;
-  answered = true;
-
+  if(answered) return; answered = true;
   const correct = questions[index].correct;
   const btns = document.querySelectorAll("#content button");
 
   btns.forEach((b,idx)=>{
-    if(idx === correct){ b.classList.add("correct"); } 
-    else if(idx === i){ b.classList.add("wrong"); }
+    if(idx === correct){ b.classList.add("correct"); } else if(idx === i){ b.classList.add("wrong"); }
     b.disabled = true;
   });
 
-  if(i === correct) {
-    score++;
-    saveState();
-    setTimeout(() => { goToNextQuestion(); }, 1000);
-  } else {
-    nextBtn.style.display = "block";
-  }
+  if(i === correct) { score++; saveState(); setTimeout(goToNextQuestion, 1000); } 
+  else { nextBtn.style.display = "block"; }
 }
 
-function goToNextQuestion() {
-  index++;
-  saveState();
+function goToNextQuestion() { index++; saveState(); if(index < questions.length){ loadQuestion(); } else { finishQuiz(); } }
 
-  if(index < questions.length){
-    loadQuestion();
-  } else {
-    finishQuiz();
-  }
-}
+function finishQuiz() { content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`; nextBtn.style.display = "none"; }
 
-function finishQuiz() {
-    content.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
-    nextBtn.style.display = "none";
-}
+if(nextBtn) { nextBtn.onclick = () => { if(!answered) return; goToNextQuestion(); }; }
 
-nextBtn.onclick = () => {
-  if(!answered) return;
-  goToNextQuestion();
-};
-
-// ============================================
-// 5. التحقق عند إعادة تحميل الصفحة (Refresh)
-// ============================================
 window.onload = () => {
   const savedPath = sessionStorage.getItem("savedPath");
-  
   if (savedPath) {
     path = JSON.parse(savedPath);
     if (path.length > 0) {
-      heroSection.style.display = "none";
-      appSection.style.display = "block";
-      homeBtn.style.display = "block";
-      
-      // استرجاع الدرجة ومكان السؤال إذا كان في اختبار
+      heroSection.style.display = "none"; infoSection.style.display = "none";
+      appSection.style.display = "block"; homeBtn.style.display = "block";
       index = parseInt(sessionStorage.getItem("savedIndex")) || 0;
       score = parseInt(sessionStorage.getItem("savedScore")) || 0;
-      
       let current = data;
       path.forEach(p => { if(current[p]) current = current[p]; });
-      
-      if(Array.isArray(current)){
-          questions = current;
-      }
-
+      if(Array.isArray(current)){ questions = current; }
       navigate();
-    } else {
-      showMenu(data);
-    }
-  } else {
-    showMenu(data);
-  }
+    } else { showHome(); }
+  } else { showHome(); }
 };
