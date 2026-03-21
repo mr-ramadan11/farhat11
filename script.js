@@ -566,13 +566,19 @@ const content = document.getElementById("content");
 const nextBtn = document.getElementById("nextBtn");
 const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
-const watermark = document.querySelector(".watermark");
+const topWatermark = document.querySelector(".watermark-top");
+const lessonWatermark = document.querySelector(".watermark-lesson");
 
 homeBtn.onclick = backToHome;
 
-function setWatermarkVisibility(show){
-  if (!watermark) return;
-  watermark.classList.toggle("is-visible", show);
+function setTopWatermarkVisibility(show){
+  if (!topWatermark) return;
+  topWatermark.classList.toggle("is-visible", show);
+}
+
+function setLessonWatermarkVisibility(show){
+  if (!lessonWatermark) return;
+  lessonWatermark.classList.toggle("is-visible", show);
 }
 
 function setActiveView(view){
@@ -581,9 +587,10 @@ function setActiveView(view){
   aboutPage.style.display = view === "about" ? "block" : "none";
   appContainer.style.display = view === "app" ? "block" : "none";
   homeBtn.style.display = view === "app" ? "block" : "none";
+  setTopWatermarkVisibility(view === "app");
 
   if (view !== "app") {
-    setWatermarkVisibility(false);
+    setLessonWatermarkVisibility(false);
   }
 }
 
@@ -648,7 +655,7 @@ function navigate(){
     title.textContent = ROOT_TITLE;
     showMenu(data);
     backBtn.style.display = "none";
-    setWatermarkVisibility(false);
+    setLessonWatermarkVisibility(false);
     saveState();
     return;
   }
@@ -660,7 +667,7 @@ function navigate(){
   } else {
     quizTitle = "";
     showMenu(current);
-    setWatermarkVisibility(false);
+    setLessonWatermarkVisibility(false);
   }
 
   backBtn.style.display = path.length ? "block" : "none";
@@ -681,7 +688,7 @@ function startQuiz(qs){
   score = 0;
   answered = false;
   selectedAnswer = null;
-  setWatermarkVisibility(true);
+  setLessonWatermarkVisibility(true);
   loadQuestion();
 }
 
@@ -826,7 +833,7 @@ function restoreState(){
         quizTitle = "";
         showMenu(data);
         backBtn.style.display = "none";
-        setWatermarkVisibility(false);
+        setLessonWatermarkVisibility(false);
         saveState();
         return;
       }
@@ -838,7 +845,7 @@ function restoreState(){
       if (Array.isArray(current)) {
         questions = current;
         quizTitle = questions.quizTitle || "";
-        setWatermarkVisibility(true);
+        setLessonWatermarkVisibility(true);
         index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, Math.max(questions.length - 1, 0))) : 0;
         score = Number.isInteger(saved.score) ? Math.max(0, saved.score) : 0;
         const wasAnswered = Boolean(saved.answered);
@@ -863,7 +870,7 @@ function restoreState(){
       } else {
         quizTitle = "";
         showMenu(current);
-        setWatermarkVisibility(false);
+        setLessonWatermarkVisibility(false);
       }
 
       saveState();
