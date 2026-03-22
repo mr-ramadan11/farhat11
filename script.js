@@ -843,7 +843,7 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
 function getQuizMetaHtml() {
   const remainingQuestions = getRemainingQuestionsCount();
   const wrongCount = getWrongAnswersCount();
-  return `<div class="quiz-meta"><span>عدد الأسئلة المتبقية: ${remainingQuestions}</span><span>الإجابات الصحيحة: ${score}</span><span>الإجابات الخاطئة: ${wrongCount}</span></div>`;
+  return `<div class="quiz-meta"><span class="meta-total">عدد الأسئلة: ${remainingQuestions}</span><span class="meta-correct">الإجابات الصحيحة: ${score}</span><span class="meta-wrong">الإجابات الخاطئة: ${wrongCount}</span></div>`;
 }
 
 function updateQuizMetaUI() {

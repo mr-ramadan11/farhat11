@@ -435,22 +435,43 @@ button {
 }
 
 #content .quiz-meta {
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:8px;
   margin-bottom:10px;
+  align-items:stretch;
 }
 
 #content .quiz-meta span {
-  display:inline-flex;
+  display:flex;
   align-items:center;
+  justify-content:center;
   padding:6px 10px;
-  font-size:clamp(12px,2.2vw,14px);
+  font-size:clamp(10.5px,1.9vw,13px);
   font-weight:700;
+  text-align:center;
+  line-height:1.35;
+  border-radius:12px;
+  border:1px solid transparent;
+  white-space:nowrap;
+}
+
+#content .quiz-meta .meta-total {
   color:#0f4c97;
   background:#edf5ff;
-  border:1px solid #cfe2ff;
-  border-radius:999px;
+  border-color:#cfe2ff;
+}
+
+#content .quiz-meta .meta-correct {
+  color:#166534;
+  background:#ecfdf3;
+  border-color:#bbf7d0;
+}
+
+#content .quiz-meta .meta-wrong {
+  color:#991b1b;
+  background:#fef2f2;
+  border-color:#fecaca;
 }
 
 #content .final-result {
