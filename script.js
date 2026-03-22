@@ -916,7 +916,7 @@ function updateQuizMetaUI() {
 function renderFinalResult() {
   const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
   const elapsed = formatElapsedTime(getElapsedTimeMs());
-  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">المدة المستغرقة: ${elapsed}</h3>`;
+  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">مدة حل الأسئلة: ${elapsed}</h3>`;
 }
 
 // تحميل سؤال
