@@ -315,6 +315,33 @@ const listeningTextQuestions = [
 
 listeningTextQuestions.quizTitle = "أسئلة على نص الاستماع نافذة الصداقة";
 
+const listeningFactoryQuestions = [
+  { question: "ما هو السؤال الذي كتبته المعلمة على السبورة؟", answers: ["ما هو لونك المفضل؟", "ما هي هوايتك؟", "ما هو حلمك؟"], correct: 2 },
+  { question: "كيف رفع بطل القصة يده ليجيب عن سؤال المعلمة؟", answers: ["بخوف وتوتر", "دون تردد", "بعد تفكير طويل"], correct: 1 },
+  { question: "ماذا يريد بطل القصة أن يصبح في المستقبل؟", answers: ["رساماً للوحات", "مؤلفاً للقصص", "معلماً للأطفال"], correct: 1 },
+  { question: "ما نوع القصص التي يريد البطل كتابتها؟", answers: ["حكايات يحبها الأطفال ويتعلمون منها", "قصصاً مرعبة ومخيفة", "روايات تاريخية طويلة"], correct: 0 },
+  { question: "بمَ نصحت المعلمة بطل القصة لتحقيق حلمه؟", answers: ["أن ينام كثيراً", "أن يخطط لهذا الحلم", "أن يشتري كتباً كثيرة فقط"], correct: 1 },
+  { question: "متى جلس البطل مع أمه ليخطط لحلمه؟", answers: ["في الصباح", "في وقت الظهيرة", "في المساء"], correct: 2 },
+  { question: "ماذا أحضر البطل عندما جلس مع أمه؟", answers: ["ورقة وقلماً", "حاسوباً محمولاً", "ألواناً خشبية"], correct: 0 },
+  { question: "ماذا رسم البطل داخل الورقة؟", answers: ["شجرة كبيرة", "كتاباً مفتوحاً يشع نوراً", "طائرة تحلق في السماء"], correct: 1 },
+  { question: "كم مرة قرر البطل أن يقرأ قصة جديدة كجزء من خطته؟", answers: ["كل يوم", "كل أسبوع", "كل شهر"], correct: 1 },
+  { question: "ماذا سيفعل البطل بعد قراءة كل قصة؟", answers: ["يكتب أفكاره", "ينام ليرتاح", "يعطي القصة لصديقه"], correct: 0 },
+  { question: "ما هي المهارة التي يريد البطل أن يتعلمها في الكتابة؟", answers: ["رسم الشخصيات", "كتابة البدايات الجذابة", "تلوين الغلاف"], correct: 1 },
+  { question: "كم مرة قرر بطل القصة أن يكتب قصة قصيرة ليشارك بها في مجلة المدرسة أو نادي القراءة؟", answers: ["مرة كل أسبوع", "مرة كل شهر", "مرة كل عام"], correct: 1 },
+  { question: "ما هو اسم بطل القصة كما ذكرت أمه؟", answers: ["يوسف", "أمجد", "مازن"], correct: 2 },
+  { question: "ما رأي الأم في الخطوات التي كتبها مازن؟", answers: ["خطوات صعبة جداً", "خطوات غير مفيدة", "مرتبة ترتيباً جيداً"], correct: 2 },
+  { question: "ماذا وعدت الأم ابنها مازن؟", answers: ["أن تشتري له هدية", "أن تكون معه لتساعده إذا احتاج", "أن تكتب القصص بدلاً منه"], correct: 1 },
+  { question: "أين علّق مازن خطته في اليوم التالي؟", answers: ["في غرفته", "في ركن الفصل على لوحة الأحلام", "في فناء المدرسة"], correct: 1 },
+  { question: "ماذا أحضر كل زميل من زملاء مازن في الفصل؟", answers: ["لوحة حلمه", "قصة جديدة", "لعبة مفضلة"], correct: 0 },
+  { question: "ماذا كتبت المعلمة فوق لوحات الطلاب؟", answers: ["أجمل اللوحات", "أحلام تُصنع على حائط الفصل", "الفصل النظيف"], correct: 1 },
+  { question: "ماذا تحتاج كل فكرة صادقة كما قالت المعلمة؟", answers: ["إلى خطة", "إلى مال كثير", "إلى وقت فراغ"], correct: 0 },
+  { question: "ماذا تحتاج كل خطة لكي تتحقق؟", answers: ["إلى أحلام أخرى", "إلى التزام وسعي", "إلى النوم المبكر"], correct: 1 },
+  { question: "إلامَ دعت المعلمة الطلاب في نهاية العام الدراسي؟", answers: ["لرحلة ترفيهية", "لعمل معرض للوحات", "لحفلة نجاح"], correct: 1 },
+  { question: "بمَ شعر مازن تجاه فصله في نهاية العام؟", answers: ["أنه مجرد جدران قديمة", "أنه مكان للدراسة فقط", "أنه لم يعد مجرد جدران، بل مصنع للأحلام"], correct: 2 }
+];
+
+listeningFactoryQuestions.quizTitle = "أسئلة على نص الاستماع (مصنع الأحلام)";
+
 const readingLessonQuestions = [
   { question: "للكلمات قوة كبيرة، فماذا يمكن أن تفعل بنا؟", answers: ["تجعلنا في أفضل حالاتنا أو تؤذينا", "لا تؤثر علينا أبداً", "تجعلنا ننام براحة"], correct: 0 },
   { question: "كم كان عمر الطفلة التي ذكرت في قصة الفراشات؟", answers: ["خمس سنوات", "ست سنوات", "سبع سنوات"], correct: 1 },
@@ -535,19 +562,26 @@ poeticTextQuestions.quizTitle = "أسئلة على النص الشعري (مصر
 if (
   data["المرحلة الابتدائية"] &&
   data["المرحلة الابتدائية"][TERM_TWO] &&
-  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"] &&
-  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"]["الوحدة الأولى"]
+  data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"]
 ) {
-  const primaryGradeFourUnitOne = data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"]["الوحدة الأولى"];
+  const primaryGradeFourTermTwo = data["المرحلة الابتدائية"][TERM_TWO]["الصف الرابع"];
+  const primaryGradeFourUnitOne = primaryGradeFourTermTwo["الوحدة الأولى"];
+  const primaryGradeFourUnitTwo = primaryGradeFourTermTwo["الوحدة الثانية"];
 
-  primaryGradeFourUnitOne["درس الاستماع"] = listeningTextQuestions;
-  primaryGradeFourUnitOne["درس القراءة الأول"] = readingLessonQuestions;
-  primaryGradeFourUnitOne["القواعد النحوية الأول"] = grammarNominalSentenceQuestions;
-  primaryGradeFourUnitOne["القواعد النحوية الثاني"] = grammarSecondLessonQuestions;
-  primaryGradeFourUnitOne["القواعد الإملائية"] = spellingRulesQuestions;
-  primaryGradeFourUnitOne["التعبير الكتابي"] = writingEventDescriptionQuestions;
-  primaryGradeFourUnitOne["درس القراءة الثاني"] = readingSecondLessonQuestions;
-  primaryGradeFourUnitOne["النص الشعري"] = poeticTextQuestions;
+  if (primaryGradeFourUnitOne) {
+    primaryGradeFourUnitOne["درس الاستماع"] = listeningTextQuestions;
+    primaryGradeFourUnitOne["درس القراءة الأول"] = readingLessonQuestions;
+    primaryGradeFourUnitOne["القواعد النحوية الأول"] = grammarNominalSentenceQuestions;
+    primaryGradeFourUnitOne["القواعد النحوية الثاني"] = grammarSecondLessonQuestions;
+    primaryGradeFourUnitOne["القواعد الإملائية"] = spellingRulesQuestions;
+    primaryGradeFourUnitOne["التعبير الكتابي"] = writingEventDescriptionQuestions;
+    primaryGradeFourUnitOne["درس القراءة الثاني"] = readingSecondLessonQuestions;
+    primaryGradeFourUnitOne["النص الشعري"] = poeticTextQuestions;
+  }
+
+  if (primaryGradeFourUnitTwo) {
+    primaryGradeFourUnitTwo["درس الاستماع"] = listeningFactoryQuestions;
+  }
 }
 
 // التحكم
