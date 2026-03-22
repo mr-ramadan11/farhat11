@@ -145,8 +145,8 @@ button {
   width:fit-content;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:8px 12px;
+  justify-content:center;
+  padding:8px 10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.26);
   background:rgba(255,255,255,0.12);
@@ -155,17 +155,9 @@ button {
   box-shadow:0 10px 22px rgba(2,6,23,0.2);
 }
 
-.contact-title {
-  margin:0;
-  font-size:clamp(12px,2vw,14px);
-  font-weight:800;
-  color:#e7f2ff;
-  white-space:nowrap;
-}
-
 .contact-grid {
   display:flex;
-  gap:10px;
+  gap:9px;
 }
 
 .contact-link {
@@ -547,12 +539,7 @@ button {
   }
 
   .contact-box {
-    padding:7px 10px;
-    gap:8px;
-  }
-
-  .contact-title {
-    font-size:12px;
+    padding:7px 9px;
   }
 
   .contact-grid {

@@ -732,6 +732,11 @@ function getWrongAnswersCount() {
   return Math.max(0, answeredCount - score);
 }
 
+function getRemainingQuestionsCount() {
+  const answeredCount = Math.min(index + (answered ? 1 : 0), questions.length);
+  return Math.max(0, questions.length - answeredCount);
+}
+
 function saveState(){
   const state = {
     view: currentView,
@@ -836,9 +841,9 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
 }
 
 function getQuizMetaHtml() {
-  const totalQuestions = questions.length;
+  const remainingQuestions = getRemainingQuestionsCount();
   const wrongCount = getWrongAnswersCount();
-  return `<div class="quiz-meta"><span>عدد الأسئلة: ${totalQuestions}</span><span>النتيجة: ${score} من ${totalQuestions}</span><span>الإجابات الصحيحة: ${score}</span><span>الإجابات الخاطئة: ${wrongCount}</span></div>`;
+  return `<div class="quiz-meta"><span>عدد الأسئلة المتبقية: ${remainingQuestions}</span><span>الإجابات الصحيحة: ${score}</span><span>الإجابات الخاطئة: ${wrongCount}</span></div>`;
 }
 
 function updateQuizMetaUI() {
@@ -849,7 +854,7 @@ function updateQuizMetaUI() {
 
 function renderFinalResult() {
   const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">انتهت الأسئلة</h3>`;
 }
 
 // تحميل سؤال
