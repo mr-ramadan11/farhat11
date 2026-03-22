@@ -236,6 +236,8 @@ const baseData = {
 const TERM_ONE = "\u0627\u0644\u062a\u0631\u0645 \u0627\u0644\u0623\u0648\u0644";
 const TERM_TWO = "\u0627\u0644\u062a\u0631\u0645 \u0627\u0644\u062b\u0627\u0646\u064a";
 const ROOT_TITLE = "\u0627\u062e\u062a\u0631 \u0627\u0644\u0642\u0633\u0645";
+const STEP_TITLES = [ROOT_TITLE, "اختر الترم", "اختر الصف", "اختر الوحدة", "اختر الدرس"];
+const QUIZ_STEP_TITLE = "أجب على الأسئلة";
 
 const data = {};
 
@@ -695,6 +697,7 @@ function setActiveView(view){
   aboutPage.style.display = view === "about" ? "block" : "none";
   appContainer.style.display = view === "app" ? "block" : "none";
   homeBtn.style.display = view === "app" ? "block" : "none";
+  document.body.classList.toggle("home-view", view === "home");
   setTopWatermarkVisibility(view === "app");
 
   if (view !== "app") {
@@ -713,6 +716,20 @@ function getCurrentNode(pathToUse = path){
   }
 
   return current;
+}
+
+function getNavigationTitle(currentNode = getCurrentNode()){
+  if (Array.isArray(currentNode)) {
+    return QUIZ_STEP_TITLE;
+  }
+
+  const safeIndex = Math.min(path.length, STEP_TITLES.length - 1);
+  return STEP_TITLES[safeIndex];
+}
+
+function getWrongAnswersCount() {
+  const answeredCount = Math.min(index + (answered ? 1 : 0), questions.length);
+  return Math.max(0, answeredCount - score);
 }
 
 function saveState(){
@@ -768,7 +785,7 @@ function navigate(){
     return;
   }
 
-  title.textContent = ROOT_TITLE;
+  title.textContent = getNavigationTitle(current);
 
   if(Array.isArray(current)){
     startQuiz(current);
@@ -796,6 +813,7 @@ function startQuiz(qs){
   score = 0;
   answered = false;
   selectedAnswer = null;
+  title.textContent = QUIZ_STEP_TITLE;
   setLessonWatermarkVisibility(true);
   loadQuestion();
 }
@@ -814,18 +832,19 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
   });
 
   nextBtn.style.display = forceNextButton || selectedIndex !== correct ? "block" : "none";
+  updateQuizMetaUI();
 }
 
-function getQuizMetaHtml(currentQuestion = null) {
+function getQuizMetaHtml() {
   const totalQuestions = questions.length;
-  const safeCurrent = Number.isInteger(currentQuestion) && totalQuestions
-    ? Math.min(Math.max(currentQuestion, 1), totalQuestions)
-    : null;
-  const currentQuestionHtml = safeCurrent !== null
-    ? `<span>السؤال: ${safeCurrent} من ${totalQuestions}</span>`
-    : "";
+  const wrongCount = getWrongAnswersCount();
+  return `<div class="quiz-meta"><span>عدد الأسئلة: ${totalQuestions}</span><span>النتيجة: ${score} من ${totalQuestions}</span><span>الإجابات الصحيحة: ${score}</span><span>الإجابات الخاطئة: ${wrongCount}</span></div>`;
+}
 
-  return `<div class="quiz-meta"><span>عدد الأسئلة: ${totalQuestions}</span>${currentQuestionHtml}<span>النتيجة: ${score} من ${totalQuestions}</span></div>`;
+function updateQuizMetaUI() {
+  const metaNode = content.querySelector(".quiz-meta");
+  if (!metaNode) return;
+  metaNode.outerHTML = getQuizMetaHtml();
 }
 
 function renderFinalResult() {
@@ -861,7 +880,7 @@ function loadQuestion(){
   const q = questions[index];
   const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
 
-  content.innerHTML = `${headingHtml}${getQuizMetaHtml(index + 1)}<h3 class="question">${q.question}</h3>`;
+  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="question">${q.question}</h3>`;
 
   q.answers.forEach((a,i) => {
     const btn = document.createElement("button");
@@ -883,19 +902,22 @@ function selectAnswer(i){
   selectedAnswer = i;
 
   const correct = questions[index].correct;
-  renderAnsweredState(i);
+  const isCorrect = i === correct;
 
-  if(i === correct) {
+  if (isCorrect) {
     score++;
     playCorrectSound();
-    saveState();
+  } else {
+    playWrongSound();
+  }
 
+  renderAnsweredState(i);
+
+  saveState();
+  if(isCorrect) {
     setTimeout(() => {
       goToNextQuestion();
     }, 1000);
-  } else {
-    playWrongSound();
-    saveState();
   }
 }
 
@@ -964,14 +986,15 @@ function restoreState(){
       }
 
       const current = getCurrentNode(path);
-      title.textContent = ROOT_TITLE;
+      title.textContent = getNavigationTitle(current);
       backBtn.style.display = "block";
 
       if (Array.isArray(current)) {
         questions = current;
         quizTitle = questions.quizTitle || "";
         setLessonWatermarkVisibility(true);
-        index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, Math.max(questions.length - 1, 0))) : 0;
+        const maxSavedIndex = saved.finished ? questions.length : Math.max(questions.length - 1, 0);
+        index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, maxSavedIndex)) : 0;
         score = Number.isInteger(saved.score) ? Math.max(0, saved.score) : 0;
         const wasAnswered = Boolean(saved.answered);
         const savedSelectedAnswer = Number.isInteger(saved.selectedAnswer) ? saved.selectedAnswer : null;

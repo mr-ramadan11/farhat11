@@ -16,6 +16,10 @@ body {
   overflow-x:hidden;
 }
 
+body.home-view {
+  overflow:hidden;
+}
+
 img {
   max-width:100%;
   display:block;
@@ -137,57 +141,50 @@ button {
 }
 
 .contact-box {
-  margin-top:16px;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,0.28);
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(5px);
-  -webkit-backdrop-filter:blur(5px);
+  margin:14px auto 0;
+  width:fit-content;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.26);
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  box-shadow:0 10px 22px rgba(2,6,23,0.2);
 }
 
 .contact-title {
-  margin-bottom:10px;
-  font-size:clamp(14px,2.4vw,16px);
+  margin:0;
+  font-size:clamp(12px,2vw,14px);
   font-weight:800;
-  color:#e6f1ff;
+  color:#e7f2ff;
+  white-space:nowrap;
 }
 
 .contact-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  display:flex;
   gap:10px;
 }
 
 .contact-link {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  min-height:96px;
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
   text-decoration:none;
-  border-radius:12px;
+  border-radius:50%;
   border:1px solid rgba(255,255,255,0.34);
-  color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12);
   transition:.25s;
 }
 
 .contact-link img {
-  width:34px;
-  height:34px;
+  width:24px;
+  height:24px;
   object-fit:contain;
-}
-
-.contact-link span {
-  font-size:13px;
-  font-weight:800;
-}
-
-.contact-link small {
-  font-size:11px;
-  color:#dbecff;
-  direction:ltr;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.28));
 }
 
 .facebook-link {
@@ -204,7 +201,7 @@ button {
 
 @media (hover:hover) {
   .contact-link:hover {
-    transform:translateY(-2px);
+    transform:translateY(-2px) scale(1.04);
     box-shadow:0 8px 18px rgba(2,6,23,0.22);
   }
 }
@@ -549,12 +546,27 @@ button {
     grid-template-columns:1fr;
   }
 
+  .contact-box {
+    padding:7px 10px;
+    gap:8px;
+  }
+
+  .contact-title {
+    font-size:12px;
+  }
+
   .contact-grid {
-    grid-template-columns:1fr;
+    gap:8px;
   }
 
   .contact-link {
-    min-height:88px;
+    width:46px;
+    height:46px;
+  }
+
+  .contact-link img {
+    width:21px;
+    height:21px;
   }
 
   .watermark-top {
