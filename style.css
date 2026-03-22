@@ -136,6 +136,79 @@ button {
   }
 }
 
+.contact-box {
+  margin-top:16px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.28);
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+
+.contact-title {
+  margin-bottom:10px;
+  font-size:clamp(14px,2.4vw,16px);
+  font-weight:800;
+  color:#e6f1ff;
+}
+
+.contact-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+.contact-link {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-height:96px;
+  text-decoration:none;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.34);
+  color:#fff;
+  transition:.25s;
+}
+
+.contact-link img {
+  width:34px;
+  height:34px;
+  object-fit:contain;
+}
+
+.contact-link span {
+  font-size:13px;
+  font-weight:800;
+}
+
+.contact-link small {
+  font-size:11px;
+  color:#dbecff;
+  direction:ltr;
+}
+
+.facebook-link {
+  background:linear-gradient(160deg,rgba(24,119,242,0.55),rgba(24,119,242,0.35));
+}
+
+.whatsapp-link {
+  background:linear-gradient(160deg,rgba(37,211,102,0.52),rgba(37,211,102,0.34));
+}
+
+.call-link {
+  background:linear-gradient(160deg,rgba(251,146,60,0.58),rgba(249,115,22,0.36));
+}
+
+@media (hover:hover) {
+  .contact-link:hover {
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(2,6,23,0.22);
+  }
+}
+
 /* ABOUT PAGE */
 .about-page {
   min-height:100dvh;
@@ -372,6 +445,31 @@ button {
   margin-bottom:10px;
 }
 
+#content .quiz-meta {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+#content .quiz-meta span {
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  font-size:clamp(12px,2.2vw,14px);
+  font-weight:700;
+  color:#0f4c97;
+  background:#edf5ff;
+  border:1px solid #cfe2ff;
+  border-radius:999px;
+}
+
+#content .final-result {
+  margin-top:8px;
+  color:#0f4c97;
+  font-size:clamp(18px,3vw,24px);
+}
+
 /* تنسيق أزرار الأقسام والإجابات */
 #content button {
   background:#f8f9fa;
@@ -449,6 +547,14 @@ button {
 @media (max-width:560px){
   .info-grid {
     grid-template-columns:1fr;
+  }
+
+  .contact-grid {
+    grid-template-columns:1fr;
+  }
+
+  .contact-link {
+    min-height:88px;
   }
 
   .watermark-top {

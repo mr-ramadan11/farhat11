@@ -556,6 +556,114 @@ let selectedAnswer = null;
 let currentView = "home";
 
 const STORAGE_KEY = "ramadan-edu-state-v2";
+let audioContext = null;
+
+function getAudioContext() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+
+  if (!audioContext) {
+    audioContext = new Ctx();
+  }
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume().catch(() => {});
+  }
+
+  return audioContext;
+}
+
+function playTone({
+  type = "sine",
+  frequency = 440,
+  duration = 0.2,
+  volume = 0.08,
+  startAt = 0,
+  endFrequency = null
+}) {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const start = ctx.currentTime + startAt;
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, start);
+  if (typeof endFrequency === "number") {
+    oscillator.frequency.exponentialRampToValueAtTime(Math.max(20, endFrequency), start + duration);
+  }
+
+  gainNode.gain.setValueAtTime(0.0001, start);
+  gainNode.gain.exponentialRampToValueAtTime(volume, start + 0.02);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  oscillator.start(start);
+  oscillator.stop(start + duration + 0.03);
+}
+
+function playNoiseBurst({ duration = 0.05, volume = 0.07, startAt = 0 }) {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const length = Math.max(1, Math.floor(ctx.sampleRate * duration));
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+  }
+
+  const source = ctx.createBufferSource();
+  const filter = ctx.createBiquadFilter();
+  const gainNode = ctx.createGain();
+  const start = ctx.currentTime + startAt;
+
+  source.buffer = buffer;
+  filter.type = "bandpass";
+  filter.frequency.setValueAtTime(1800, start);
+  filter.Q.setValueAtTime(1.5, start);
+  gainNode.gain.setValueAtTime(volume, start);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  source.connect(filter);
+  filter.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  source.start(start);
+  source.stop(start + duration + 0.02);
+}
+
+function playCorrectSound() {
+  // جرس احتفالي + نبضات تصفيق قصيرة
+  playTone({ type: "triangle", frequency: 740, duration: 0.16, volume: 0.07, startAt: 0 });
+  playTone({ type: "triangle", frequency: 988, duration: 0.2, volume: 0.08, startAt: 0.08 });
+  playTone({ type: "triangle", frequency: 1318, duration: 0.24, volume: 0.09, startAt: 0.18 });
+
+  playNoiseBurst({ duration: 0.05, volume: 0.06, startAt: 0.02 });
+  playNoiseBurst({ duration: 0.05, volume: 0.06, startAt: 0.11 });
+  playNoiseBurst({ duration: 0.05, volume: 0.06, startAt: 0.2 });
+}
+
+function playWrongSound() {
+  // إنذار قصير هابط
+  playTone({
+    type: "sawtooth",
+    frequency: 420,
+    endFrequency: 190,
+    duration: 0.24,
+    volume: 0.09,
+    startAt: 0
+  });
+  playTone({
+    type: "square",
+    frequency: 250,
+    endFrequency: 170,
+    duration: 0.16,
+    volume: 0.06,
+    startAt: 0.12
+  });
+}
 
 // عناصر الصفحة
 const heroSection = document.querySelector(".hero");
@@ -660,7 +768,7 @@ function navigate(){
     return;
   }
 
-  title.textContent = path.length ? path.join(" > ") : ROOT_TITLE;
+  title.textContent = ROOT_TITLE;
 
   if(Array.isArray(current)){
     startQuiz(current);
@@ -708,11 +816,28 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
   nextBtn.style.display = forceNextButton || selectedIndex !== correct ? "block" : "none";
 }
 
+function getQuizMetaHtml(currentQuestion = null) {
+  const totalQuestions = questions.length;
+  const safeCurrent = Number.isInteger(currentQuestion) && totalQuestions
+    ? Math.min(Math.max(currentQuestion, 1), totalQuestions)
+    : null;
+  const currentQuestionHtml = safeCurrent !== null
+    ? `<span>السؤال: ${safeCurrent} من ${totalQuestions}</span>`
+    : "";
+
+  return `<div class="quiz-meta"><span>عدد الأسئلة: ${totalQuestions}</span>${currentQuestionHtml}<span>النتيجة: ${score} من ${totalQuestions}</span></div>`;
+}
+
+function renderFinalResult() {
+  const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+}
+
 // تحميل سؤال
 function loadQuestion(){
   if (!questions.length) {
     const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-    content.innerHTML = `${headingHtml}<p>لا يوجد أسئلة بعد</p>`;
+    content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<p>لا يوجد أسئلة بعد</p>`;
     nextBtn.style.display = "none";
     saveState();
     return;
@@ -723,8 +848,7 @@ function loadQuestion(){
   }
 
   if (index >= questions.length) {
-    const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-    content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+    renderFinalResult();
     nextBtn.style.display = "none";
     saveState();
     return;
@@ -737,7 +861,7 @@ function loadQuestion(){
   const q = questions[index];
   const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
 
-  content.innerHTML = `${headingHtml}<h3 class="question">${q.question}</h3>`;
+  content.innerHTML = `${headingHtml}${getQuizMetaHtml(index + 1)}<h3 class="question">${q.question}</h3>`;
 
   q.answers.forEach((a,i) => {
     const btn = document.createElement("button");
@@ -763,12 +887,14 @@ function selectAnswer(i){
 
   if(i === correct) {
     score++;
+    playCorrectSound();
     saveState();
 
     setTimeout(() => {
       goToNextQuestion();
     }, 1000);
   } else {
+    playWrongSound();
     saveState();
   }
 }
@@ -782,8 +908,7 @@ function goToNextQuestion() {
   if(index < questions.length){
     loadQuestion();
   } else {
-    const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-    content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+    renderFinalResult();
     nextBtn.style.display = "none";
     saveState();
   }
@@ -839,7 +964,7 @@ function restoreState(){
       }
 
       const current = getCurrentNode(path);
-      title.textContent = path.join(" > ");
+      title.textContent = ROOT_TITLE;
       backBtn.style.display = "block";
 
       if (Array.isArray(current)) {
@@ -853,11 +978,10 @@ function restoreState(){
 
         if (!questions.length) {
           const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-          content.innerHTML = `${headingHtml}<p>لا يوجد أسئلة بعد</p>`;
+          content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<p>لا يوجد أسئلة بعد</p>`;
           nextBtn.style.display = "none";
         } else if (saved.finished) {
-          const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
-          content.innerHTML = `${headingHtml}<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+          renderFinalResult();
           nextBtn.style.display = "none";
         } else {
           loadQuestion();
