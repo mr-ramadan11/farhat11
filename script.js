@@ -1373,10 +1373,17 @@ function restoreState(){
     ? navigationEntry.type
     : "navigate";
   const isReload = navigationType === "reload";
+  const urlState = readStateFromUrl();
 
-  // أي دخول جديد يبدأ من الرئيسية، والاستمرار فقط عند إعادة التحميل.
+  // في الدخول الجديد: تجاهل التخزين السابق، لكن احترم المسار الموجود داخل الرابط المنسوخ.
   if (!isReload) {
     sessionStorage.removeItem(SESSION_STORAGE_KEY);
+
+    if (urlState.hasExplicitState) {
+      restoreFromUrlState(urlState);
+      return;
+    }
+
     path = [];
     quizTitle = "";
     setActiveView("home");
@@ -1384,7 +1391,6 @@ function restoreState(){
     return;
   }
 
-  const urlState = readStateFromUrl();
   const rawState = sessionStorage.getItem(SESSION_STORAGE_KEY);
 
   if (!rawState) {
