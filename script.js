@@ -342,6 +342,113 @@ const listeningFactoryQuestions = [
 
 listeningFactoryQuestions.quizTitle = "أسئلة على نص الاستماع (مصنع الأحلام)";
 
+const readingDreamCityQuestions = [
+  { question: "مع مَن ذهب بطل القصة لزيارة خاله؟", answers: ["مع أبيه", "مع أصدقائه", "مع أمه"], correct: 2 },
+  { question: "ما هو اسم خال بطل القصة؟", answers: ["عماد", "مازن", "نبيل"], correct: 0 },
+  { question: "ماذا كان الخال يفعل عندما ذهبوا لزيارته؟", answers: ["كان يقرأ كتاباً عن التخطيط", "كان يُكمل مُجَسَّماً لمدينة جميلة", "كان يرسم لوحة على الحائط"], correct: 1 },
+  { question: "ما هو اسم بطل القصة كما ناداه خاله؟", answers: ["نبيل", "يوسف", "مازن"], correct: 0 },
+  { question: "أين بُنيت المدينة الحقيقية التي أراد الخال أن يُعَرِّف بطل القصة عليها؟", answers: ["فوق الجبال", "تحت سطح البحر", "فوق الرمال"], correct: 2 },
+  { question: "ما هو اسم هذه المدينة الجديدة؟", answers: ["مدينة الإسكندرية", "مدينة العلمين", "مدينة القاهرة الجديدة"], correct: 1 },
+  { question: "على أي بحر تطل مدينة العلمين الجديدة؟", answers: ["البحر الأحمر", "البحر الميت", "البحر الأبيض المتوسط"], correct: 2 },
+  { question: "كيف وصف الخال أبراج مدينة العلمين؟", answers: ["أبراجها شاهقة", "أبراجها قديمة", "أبراجها منخفضة"], correct: 0 },
+  { question: "كيف كانت مساحة شوارع مدينة العلمين الجديدة؟", answers: ["ضيقة جداً", "واسعة", "مزدحمة"], correct: 1 },
+  { question: "ما نوع البحيرات الموجودة في مدينة العلمين؟", answers: ["بحيرات جافة", "بحيرات طبيعية", "بحيرات صناعية"], correct: 2 },
+  { question: "ماذا يوجد داخل المتحف الموجود في مدينة العلمين؟", answers: ["يروي قصصاً خيالية للأطفال", "يروي بطولات المصريين", "يعرض آثاراً من دول أخرى"], correct: 1 },
+  { question: "ما هي صفة الأحياء السكنية التي أراها الخال لنبيل في الصور؟", answers: ["أحياء سكنية ذكية", "أحياء سكنية عشوائية", "أحياء سكنية قديمة"], correct: 0 },
+  { question: "مَن الذين استضافتهم قاعة المؤتمرات العالمية بالمدينة؟", answers: ["أبطال الرياضة فقط", "زواراً من بلاد مختلفة", "طلاب المدارس المجاورة"], correct: 1 },
+  { question: "لماذا كانت المدينة منظمة بهذا الشكل الرائع؟", answers: ["لأنها صُممت بالصدفة", "لأنها خُطِّطَ لها بدقة", "لأن مساحتها صغيرة"], correct: 1 },
+  { question: "كيف وُضعت المساحات الخضراء وممرات المشاة في المدينة؟", answers: ["وُضعت في مكانها عن قصد", "وُضعت بشكل عشوائي", "وُضعت خارج المدينة"], correct: 0 },
+  { question: "حسب كلام الخال، كيف بدأ إنجاز كل هذا العمل؟", answers: ["بدأ بالتنفيذ المباشر دون تفكير", "بدأ بفكرة، ثم خطة، ثم تنفيذ", "بدأ بخطة، ثم فكرة، ثم تنفيذ"], correct: 1 },
+  { question: "ماذا أطلق الخال على ترتيب الخطوات (فكرة - خطة - تنفيذ)؟", answers: ["مهارة القراءة", "مهارة التخطيط", "مهارة الرسم"], correct: 1 },
+  { question: "ماذا أدرك نبيل عندما نظر إلى المُجَسَّم في النهاية؟", answers: ["أن بناء المدن أمر مستحيل", "أن كل حلم كبير يبدأ بخطوة صغيرة", "أنه لا يحب الهندسة"], correct: 1 },
+  { question: "بمَ شعر نبيل في نهاية القصة تجاه مدينة العلمين؟", answers: ["أنه يريد زيارتها فقط", "أنه لا يهتم بأمرها", "أنه يريد أن يكون ممن يُكمل بناءها في يوم من الأيام"], correct: 2 },
+  { question: "ما مضاد كلمة \"حَقِيقِيَّة\"؟", answers: ["صَادِقَة", "خَيَالِيَّة", "وَاقِعِيَّة"], correct: 1 },
+  { question: "في عبارة \"أَبْرَاجُهَا شَاهِقَةٌ\"، ما معنى كلمة \"شَاهِقَة\"؟", answers: ["مُنْخَفِضَة", "وَاسِعَة", "مُرْتَفِعَة"], correct: 2 },
+  { question: "ما مضاد (عكس) كلمة \"شَاهِقَة\"؟", answers: ["مُنْخَفِضَة", "عَالِيَة", "كَبِيرَة"], correct: 0 },
+  { question: "ما معنى كلمة \"يَرْوِي\" في جملة (مُتْحَفٌ يَرْوِي بُطُولَاتِ الْمِصْرِيِّينَ)؟", answers: ["يَسْقِي", "يَحْكِي", "يَشْرَبُ"], correct: 1 },
+  { question: "ما مفرد كلمة \"أَحْيَاء\" في جملة (أَحْيَاءٍ سَكَنِيَّةٍ)؟", answers: ["حَيّ", "حَيَاة", "تَحِيَّة"], correct: 0 },
+  { question: "ما مفرد كلمة \"زُوَّار\"؟", answers: ["مَزَار", "زِيَارَة", "زَائِر"], correct: 2 },
+  { question: "ما معنى كلمة \"يَبْدُو\" في قول نبيل (يَبْدُو كُلُّ شَيْءٍ مُنَظَّمًا)؟", answers: ["يَظْهَرُ", "يَخْتَفِي", "يَبْدَأُ"], correct: 0 },
+  { question: "ما معنى كلمة \"أَدْرَكْتُ\" في جملة (وَأَدْرَكْتُ حِينَهَا أَنَّ كُلَّ حُلْمٍ كَبِيرٍ...)؟", answers: ["نَسِيتُ", "تَجَاهَلْتُ", "عَرَفْتُ وَفَهِمْتُ"], correct: 2 },
+  { question: "ما مضاد (عكس) كلمة \"أَدْرَكْتُ\"؟", answers: ["تَعَلَّمْتُ", "جَهِلْتُ", "تَذَكَّرْتُ"], correct: 1 },
+  { question: "\"شوارعها واسعة\".. ما مضاد كلمة \"واسعة\"؟", answers: ["فسيحة", "ضيقة", "طويلة"], correct: 1 }
+];
+
+readingDreamCityQuestions.quizTitle = "أسئلة على درس القراءة (مدينة تبنى بالحلم)";
+
+const grammarActorFormsQuestions = [
+  { question: "\"تَعَالَتْ أَصْوَاتُ التَّلَامِيذِ بِالفَرَحِ\". الفاعل (أصوات) مرفوع بالضمة لأنه:", answers: ["مفرد", "جمع تكسير", "جمع مؤنث سالم"], correct: 1 },
+  { question: "\"مَضَتْ أَوْقَاتُ الحِصَّةِ سَرِيعاً\". كلمة (أوقات) فاعل مرفوع بالضمة لأنها:", answers: ["جمع مؤنث سالم", "مفرد", "جمع تكسير"], correct: 2 },
+  { question: "\"أَعْجَبَتْنِي أَبْيَاتُ القَصِيدَةِ\". كلمة (أبيات) فاعل مرفوع وعلامة رفعه الضمة لأنها:", answers: ["جمع مؤنث سالم", "جمع تكسير", "مفرد"], correct: 1 },
+  { question: "\"نَمَا نَبَاتُ الحَدِيقَةِ\". كلمة (نبات) فاعل مرفوع بالضمة لأنه:", answers: ["جمع تكسير", "جمع مؤنث سالم", "مفرد"], correct: 2 },
+  { question: "\"نَهَضَ الأَمْوَاتُ يَوْمَ القِيَامَةِ\". كلمة (الأموات) فاعل مرفوع بالضمة لأنها:", answers: ["جمع تكسير", "جمع مؤنث سالم", "مفرد"], correct: 0 },
+  { question: "\"تَوَافَرَتْ أَقْوَاتُ النَّاسِ فِي السُّوقِ\". كلمة (أقوات) فاعل مرفوع بالضمة لأنها:", answers: ["جمع تكسير", "جمع مؤنث سالم", "مفرد"], correct: 0 },
+  { question: "\"يَكْتُبُ الطَّالِبُ الدَّرْسَ\". الفاعل المرفوع بالضمة هنا نوعه:", answers: ["مفرد", "جمع تكسير", "جمع مؤنث سالم"], correct: 0 },
+  { question: "\"شَرَحَتِ المُعَلِّمَاتُ الدَّرْسَ بِإِتْقَانٍ\". علامة رفع الفاعل (المعلمات) هي:", answers: ["الألف", "الضمة", "الكسرة"], correct: 1 },
+  { question: "\"تَفَوَّقَ عُلَمَاءُ مِصْرَ\". الفاعل (علماء) مرفوع بالضمة لأنه:", answers: ["جمع مذكر سالم", "مفرد", "جمع تكسير"], correct: 2 },
+  { question: "\"تُعَالِجُ الطَّبِيبَاتُ المَرْضَى\". الفاعل في هذه الجملة هو:", answers: ["تعالج", "الطبيبات", "المرضى"], correct: 1 },
+  { question: "\"طَارَ العُصْفُورُ فِي السَّمَاءِ\". إعراب كلمة (العصفور):", answers: ["مبتدأ مرفوع بالضمة", "فاعل مرفوع بالضمة", "خبر مرفوع بالضمة"], correct: 1 },
+  { question: "\"حَافَظَتِ الطَّالِبَاتُ عَلَى نَظَافَةِ الفَصْلِ\". علامة الرفع في كلمة (الطالبات):", answers: ["الألف", "الواو", "الضمة"], correct: 2 },
+  { question: "\"تَفَتَّحَتِ الأَزْهَارُ فِي الرَّبِيعِ\". الفاعل (الأزهار) نوعه:", answers: ["مفرد", "جمع تكسير", "جمع مؤنث سالم"], correct: 1 },
+  { question: "\"تَعَاوَنَتِ المُهَنْدِسَاتُ فِي المَشْرُوعِ\". الفاعل (المهندسات) نوعه:", answers: ["جمع مؤنث سالم", "جمع تكسير", "مفرد"], correct: 0 },
+  { question: "\"نَجَحَ التَّلَامِيذُ فِي الِاخْتِبَارِ\". الفاعل هنا:", answers: ["نجح", "التلاميذ", "الاختبار"], correct: 1 },
+  { question: "\"يَرْسُمُ الفَنَّانُ لَوْحَةً\". كلمة (الفنان) تعرب:", answers: ["مبتدأ", "خبراً", "فاعلاً"], correct: 2 },
+  { question: "\"أَحْرَزَتِ اللَّاعِبَاتُ الهَدَفَ\". الفاعل (اللاعبات) مرفوع وعلامة رفعه:", answers: ["الألف", "الكسرة", "الضمة"], correct: 2 },
+  { question: "\"فَرِحَ الأَطْفَالُ بِالهَدِيَّةِ\". كلمة (الأطفال) فاعل مرفوع وعلامة رفعه:", answers: ["الألف", "الواو", "الضمة"], correct: 2 },
+  { question: "\"تَقَدَّمَتِ الصِّنَاعَاتُ فِي وَطَنِنَا\". الفاعل (الصناعات) مرفوع بالضمة لأنه:", answers: ["جمع تكسير", "جمع مؤنث سالم", "مفرد"], correct: 1 },
+  { question: "\"يَشْرَحُ الدَّرْسَ المُعَلِّمُ\". أين الفاعل في هذه الجملة؟", answers: ["الدرس", "المعلم", "يشرح"], correct: 1 },
+  { question: "\"حَضَرَتْ أُسْرَةُ المَدْرَسَةِ طَابُورَ الصَّبَاحِ\". الفاعل المرفوع بالضمة هنا هو:", answers: ["الصباح", "طابور", "أسرة"], correct: 2 },
+  { question: "\"نَظَّفَ العُمَّالُ شَوَارِعَ المَدِينَةِ\". إعراب كلمة (العمال):", answers: ["فاعل مرفوع بالواو", "فاعل مرفوع بالضمة", "مبتدأ مرفوع بالضمة"], correct: 1 },
+  { question: "\"تُقَدِّمُ الإِذَاعَاتُ بَرَامِجَ مُفِيدَةً\". كلمة (الإذاعات) فاعل مرفوع بـ:", answers: ["الكسرة نيابة عن الفتحة", "الضمة", "الألف"], correct: 1 },
+  { question: "\"تَشْتَدُّ الرِّيَاحُ فِي الشِّتَاءِ\". كلمة (الرياح) نوعها:", answers: ["مفرد", "جمع مؤنث سالم", "جمع تكسير"], correct: 2 },
+  { question: "\"أَضَاءَتِ المَصَابِيحُ شَوَارِعَ القَرْيَةِ\". كلمة (المصابيح) فاعل مرفوع وعلامة رفعه الضمة لأنه:", answers: ["جمع مؤنث سالم", "جمع تكسير", "جمع مذكر سالم"], correct: 1 },
+  { question: "\"تَطِيرُ الفَرَاشَاتُ بَيْنَ الأَزْهَارِ\". كلمة (الفراشات) فاعل مرفوع بالضمة لأنها:", answers: ["جمع تكسير", "جمع مؤنث سالم", "مفرد"], correct: 1 },
+  { question: "\"يَبْنِي المُوَاطِنُ وَطَنَهُ بِالجُهْدِ\". الفاعل المرفوع في الجملة هو:", answers: ["وطنه", "الجهد", "المواطن"], correct: 2 },
+  { question: "\"تَحْتَفِلُ النَّاجِحَاتُ بِتَفَوُّقِهِنَّ\". إعراب (الناجحات):", answers: ["مبتدأ مرفوع بالضمة", "فاعل مرفوع بالألف", "فاعل مرفوع بالضمة"], correct: 2 },
+  { question: "\"يَقْرَأُ كِتَابَ النَّحْوِ الطَّالِبُ الذَّكِيُّ\". الفاعل المرفوع في الجملة هو:", answers: ["كتاب", "النحو", "الطالب"], correct: 2 },
+  { question: "\"أَبْحَرَتِ السُّفُنُ فِي المُحِيطِ\". الفاعل (السفن) مرفوع وعلامة رفعه الضمة لأنه:", answers: ["مفرد", "جمع مؤنث سالم", "جمع تكسير"], correct: 2 },
+  { question: "\"سَقَطَ قَطَرَاتُ المَطَرِ عَلَى النَّافِذَةِ\". إعراب (قطرات):", answers: ["فاعل مرفوع بالكسرة", "فاعل مرفوع بالضمة", "مفعول به منصوب بالكسرة"], correct: 1 },
+  { question: "\"يَكْتَشِفُ العَبَاقِرَةُ أَشْيَاءَ جَدِيدَةً\". كلمة (العباقرة) فاعل مرفوع بـ:", answers: ["الألف", "الواو", "الضمة"], correct: 2 }
+];
+
+grammarActorFormsQuestions.quizTitle = "أسئلة على الفاعل (المفرد - جمع المؤنث السالم - جمع التكسير)";
+
+const grammarDualAndMasculinePluralQuestions = [
+  { question: "\"تزين ميدان المدرسة بالاحتفالات\". الفاعل (ميدان) مرفوع وعلامة رفعه:", answers: ["الألف", "الضمة", "الواو"], correct: 1 },
+  { question: "\"انتشرت فئران الحقل في المزرعة\". الفاعل (فئران) مرفوع وعلامة رفعه:", answers: ["الألف", "الواو", "الضمة"], correct: 2 },
+  { question: "\"ظهرت ألوان الطيف في السماء\". الفاعل (ألوان) مرفوع وعلامة رفعه:", answers: ["الضمة", "الألف", "الواو"], correct: 0 },
+  { question: "\"تعاون جيران الحي في تنظيفه\". الفاعل (جيران) مرفوع وعلامة رفعه:", answers: ["الألف", "الضمة", "الواو"], correct: 1 },
+  { question: "\"دمعت عيون الأمهات فرحا بالنجاح\". الفاعل (عيون) مرفوع وعلامة رفعه:", answers: ["الواو", "الضمة", "الألف"], correct: 1 },
+  { question: "\"تطورت فنون الرسم الحديثة\". الفاعل (فنون) مرفوع وعلامة رفعه:", answers: ["الضمة", "الواو", "الألف"], correct: 0 },
+  { question: "\"تفرعت غصون الشجرة الكبيرة\". كلمة (غصون) تعرب فاعل مرفوع وعلامة رفعه:", answers: ["الألف", "الواو", "الضمة"], correct: 2 },
+  { question: "\"خابت ظنون الأعداء\". الفاعل (ظنون) مرفوع وعلامة رفعه:", answers: ["الواو", "الألف", "الضمة"], correct: 2 },
+  { question: "\"انتظمت شؤون العمل في المصنع\". الفاعل (شؤون) مرفوع وعلامة رفعه:", answers: ["الضمة", "الواو", "الألف"], correct: 0 },
+  { question: "\"فاز اللاعبان في المسابقة الرياضية\". الفاعل (اللاعبان) مرفوع وعلامة رفعه:", answers: ["الضمة", "الألف", "الواو"], correct: 1 },
+  { question: "\"يزرع الفلاحون الأرض بنشاط\". الفاعل المرفوع بالواو في الجملة هو:", answers: ["الأرض", "يزرع", "الفلاحون"], correct: 2 },
+  { question: "\"تفوق التلميذان في الاختبار\". إعراب كلمة (التلميذان):", answers: ["فاعل مرفوع بالضمة", "فاعل مرفوع بالألف", "مبتدأ مرفوع بالألف"], correct: 1 },
+  { question: "\"تصافح الخصمان بعد المباراة\". كلمة (الخصمان) تعرب:", answers: ["مفعول به", "فاعل مرفوع بالألف", "خبر مرفوع بالألف"], correct: 1 },
+  { question: "\"دافع المحامون عن المظلومين\". علامة الرفع في كلمة (المحامون) هي:", answers: ["الألف", "الواو", "الضمة"], correct: 1 },
+  { question: "\"عالج الطبيبان المريض\". الفاعل هنا نوعه:", answers: ["مفرد", "جمع تكسير", "مثنى"], correct: 2 },
+  { question: "\"صلى المسلمون صلاة العيد\". الفاعل (المسلمون) نوعه:", answers: ["جمع تكسير", "جمع مؤنث سالم", "جمع مذكر سالم"], correct: 2 },
+  { question: "\"ينظم المعلمون مسابقات ممتعة\". الفاعل في الجملة هو:", answers: ["ينظم", "المعلمون", "مسابقات"], correct: 1 },
+  { question: "\"يتنافس الفريقان على الكأس\". كلمة (الفريقان) مرفوعة بالألف لأنها:", answers: ["فاعل مثنى", "فاعل جمع مذكر سالم", "مبتدأ مثنى"], correct: 0 },
+  { question: "\"يصمم المبرمجون ألعابا تعليمية مفيدة\". كلمة (المبرمجون) فاعل مرفوع وعلامة رفعه:", answers: ["الواو", "الضمة", "الألف"], correct: 0 },
+  { question: "كلمة \"مواطنون\" في جملة (يتعاون مواطنون شرفاء لحماية البيئة) نوعها:", answers: ["جمع مذكر سالم", "جمع تكسير", "مثنى"], correct: 0 },
+  { question: "كلمة \"قوانين\" في جملة (صدرت قوانين جديدة للمرور) نوعها:", answers: ["جمع مذكر سالم", "جمع تكسير", "مثنى"], correct: 1 },
+  { question: "كلمة \"بساتين\" في جملة (أزهرت بساتين القرية) نوعها:", answers: ["جمع مذكر سالم", "جمع مؤنث سالم", "جمع تكسير"], correct: 2 },
+  { question: "كلمة \"رمضان\" في جملة (جاء رمضان بالخير) نوعها:", answers: ["مفرد", "مثنى", "جمع"], correct: 0 },
+  { question: "كلمة \"الفائزون\" في جملة (فرح الفائزون بالجائزة) نوعها:", answers: ["جمع تكسير", "جمع مذكر سالم", "مثنى"], correct: 1 },
+  { question: "كلمة \"بطون\" في جملة (امتلأت بطون الجياع) نوعها:", answers: ["جمع مذكر سالم", "جمع تكسير", "مفرد"], correct: 1 },
+  { question: "كلمة \"شابان\" في جملة (تطوع شابان في العمل الخيري) نوعها:", answers: ["مفرد", "جمع تكسير", "مثنى"], correct: 2 },
+  { question: "كلمة \"عناوين\" في جملة (تغيرت عناوين الصحف اليوم) نوعها:", answers: ["جمع تكسير", "جمع مذكر سالم", "مثنى"], correct: 0 },
+  { question: "كلمة \"عثمان\" في جملة (قرأ عثمان قصة مصنع الأحلام) نوعها:", answers: ["مفرد", "مثنى", "جمع"], correct: 0 },
+  { question: "كلمة \"مخترعون\" في جملة (شارك مخترعون صغار في المعرض) نوعها:", answers: ["جمع تكسير", "جمع مذكر سالم", "مثنى"], correct: 1 },
+  { question: "كلمة \"ميادين\" في جملة (تطورت ميادين العلم) نوعها:", answers: ["جمع مذكر سالم", "جمع تكسير", "مثنى"], correct: 1 },
+  { question: "كلمة \"ثعبان\" في جملة (زحف ثعبان على الرمال) نوعها:", answers: ["مثنى", "جمع تكسير", "مفرد"], correct: 2 }
+];
+
+grammarDualAndMasculinePluralQuestions.quizTitle = "أسئلة على  الفاعل ( المثنى - جمع المذكر السالم)";
+
 const readingLessonQuestions = [
   { question: "للكلمات قوة كبيرة، فماذا يمكن أن تفعل بنا؟", answers: ["تجعلنا في أفضل حالاتنا أو تؤذينا", "لا تؤثر علينا أبداً", "تجعلنا ننام براحة"], correct: 0 },
   { question: "كم كان عمر الطفلة التي ذكرت في قصة الفراشات؟", answers: ["خمس سنوات", "ست سنوات", "سبع سنوات"], correct: 1 },
@@ -432,6 +539,35 @@ const spellingRulesQuestions = [
 
 spellingRulesQuestions.quizTitle = "أسئلة على القواعد الإملائية";
 
+const softAlifInNounsQuestions = [
+  { question: "تقع مدينة ........ في محافظة الغربية بمصر.", answers: ["زفتا", "زفتى", "زفتي"], correct: 1 },
+  { question: "يقف الحجاج في مشعر ........ بالمملكة العربية السعودية.", answers: ["مِنَا", "مِنَى", "مِني"], correct: 1 },
+  { question: "سافرت العائلة لقضاء إجازة الصيف في ........ .", answers: ["مرسا مطروح", "مرسي مطروح", "مرسى مطروح"], correct: 2 },
+  { question: "الإمام البخاري منسوب إلى مدينة ........ .", answers: ["بخارى", "بخارا", "بخاري"], correct: 0 },
+  { question: "كان ........ من أشهر ملوك الفرس في التاريخ.", answers: ["كسرا", "كسرى", "كسري"], correct: 1 },
+  { question: "تقع مدينة ........ التاريخية العريقة في العراق.", answers: ["نينوا", "نينوي", "نينوى"], correct: 2 },
+  { question: "يعيش صديقي في مدينة ........ السورية.", answers: ["نوى", "نوا", "نوي"], correct: 0 },
+  { question: "جزيرة ........ تُعد من أجمل الجزر الطبيعية في اليمن.", answers: ["سقطرا", "سقطرى", "سقطري"], correct: 1 },
+  { question: "مدينة ........ الشام بها آثار رومانية مميزة.", answers: ["بصرى", "بصرا", "بصري"], correct: 0 },
+  { question: "الألف اللينة هي ألف تأتي دائماً في ........ الكلمة.", answers: ["بداية", "وسط", "نهاية"], correct: 2 },
+  { question: "يتوكأ جدي على ........ من خشب.", answers: ["عَصَا", "عَصَى", "عَصَي"], correct: 0 },
+  { question: "\"هذا ........ شُجاع ومهذب\". الكلمة الصحيحة إملائياً للفراغ هي:", answers: ["فَتَا", "فَتًى", "فَتَي"], correct: 1 },
+  { question: "الكلمة المكتوبة بشكل صحيح إملائياً من بين أسماء الدول التالية هي:", answers: ["أمريگى", "أمريكا", "أمريكي"], correct: 1 },
+  { question: "\"ذهبتُ إلى ........ لزيارة صديقي المريض\".", answers: ["المُسْتَشْفَا", "المُسْتَشْفَي", "المُسْتَشْفَى"], correct: 2 },
+  { question: "أي من الكلمات الآتية كُتبت فيها الألف اللينة قائمة (ا)؟", answers: ["شُبْرَا", "مُصْطَفَى", "هُدَى"], correct: 0 },
+  { question: "اسم من أسماء الإناث ينتهي بألف لينة على صورة الياء (ى):", answers: ["مَهَا", "سَلْمَى", "عُلَا"], correct: 1 },
+  { question: "\"عاصمة ........ هي باريس\". كيف تُكتب الكلمة بشكل صحيح؟", answers: ["فَرَنْسَا", "فَرَنْسَى", "فَرَنْسَي"], correct: 0 },
+  { question: "\"عادت أختي ........ من المدرسة متفوقة\".", answers: ["عُلَى", "عُلَا", "عُلَي"], correct: 1 },
+  { question: "تُكتب الألف اللينة على صورة الياء (ى) في كلمة:", answers: ["هُولَنْدَا", "طَنْطَا", "مُوسَى"], correct: 2 },
+  { question: "\"سقطت قطرات ........ على أوراق الشجر صباحاً\".", answers: ["النَّدَا", "النَّدَى", "النَّدي"], correct: 1 },
+  { question: "\"يعيش الكثير من الفلاحين في ........ هادئة\".", answers: ["قُرَا", "قُرَى", "قُري"], correct: 1 },
+  { question: "صوّب الخطأ الإملائي في جملة (نجحت مَهَى في الاختبار):", answers: ["مَهَا", "مَهَي", "الكلمة صحيحة لا تحتاج لتصويب"], correct: 0 },
+  { question: "\"سافر صديقي إلى ........ لاستكمال دراسته\".", answers: ["هُولَنْدَى", "هُولَنْدَا", "هُولَنْدَي"], correct: 1 },
+  { question: "الكلمة التي تنتهي بألف لينة تُنطق ألفاً وتُكتب (ى) من المجموعة التالية هي:", answers: ["عِيسَى", "سُهَا", "طَنْطَا"], correct: 0 }
+];
+
+softAlifInNounsQuestions.quizTitle = "أسئلة على الألف اللينة في الأسماء";
+
 const writingEventDescriptionQuestions = [
   { question: "ماذا يكتب في \"اسم الحدث\"؟", answers: ["قصة طويلة", "عنواناً يُعبر عن الحدث", "سؤالاً صعباً"], correct: 1 },
   { question: "كم عدد العناصر الأساسية لكتابة وصف حدث كما هو موضح بالشكل؟", answers: ["ثلاثة عناصر", "أربعة عناصر", "خمسة عناصر"], correct: 1 },
@@ -454,6 +590,58 @@ const writingEventDescriptionQuestions = [
 ];
 
 writingEventDescriptionQuestions.quizTitle = "أسئلة على عناصر كتابة (وصف حدث)";
+
+const writingPlaceDescriptionQuestions = [
+  { question: "في أي عنصر من عناصر كتابة التعبير نُحَدِّدُ المكان الذي سَنقوم بوصفه؟", answers: ["المقدمة", "تفاصيل المكان", "الخاتمة"], correct: 0 },
+  { question: "\"تفاصيل المكان\" تتطلب من الكاتب أن يصف المكان وصفاً دقيقاً من حيث:", answers: ["الزوار والمواصلات", "شكله، ونظامه، ومحتوياته", "الأمنيات والفوائد"], correct: 1 },
+  { question: "\"يوجد في منتصف الحديقة نافورة مياه كبيرة ومقاعد خشبية\". هذه الجملة تعبر عن:", answers: ["الانطباع والشعور", "محتويات المكان", "تحديد المكان"], correct: 1 },
+  { question: "الجملة التي تصف \"شكل\" المكان بوضوح من بين الجمل التالية هي:", answers: ["الزوار يلتزمون بالهدوء التام.", "المبنى دائري الشكل وجدرانه زجاجية لامعة.", "تعلمت أهمية القراءة اليوم."], correct: 1 },
+  { question: "أين نكتب الانطباع أو الشعور الذي تَوَلَّد لدينا بعد زيارة المكان؟", answers: ["في المقدمة", "في تفاصيل المكان", "في الخاتمة"], correct: 2 },
+  { question: "الجملة: \"أتمنى أن تتاح لي الفرصة لزيارة هذا المكان الساحر مرة أخرى\". تُكتب في قسم:", answers: ["الخاتمة لأنها (أمنية)", "المقدمة لأنها (تحديد للمكان)", "تفاصيل المكان لأنها (وصف للشكل)"], correct: 0 },
+  { question: "\"لقد أدركت أهمية الحفاظ على آثار بلادنا وتاريخنا العظيم\". هذه الجملة تعبر عن:", answers: ["شكل المكان", "فائدة استفدناها", "عنوان المكان"], correct: 1 },
+  { question: "\"شعرت بالفخر والاعتزاز وأنا أقف أمام هذا الأثر العظيم\". هذه الجملة توضع ضمن:", answers: ["الانطباع والشعور", "شكل المكان", "تحديد المكان"], correct: 0 },
+  { question: "لتوضيح \"محتويات\" فصلك الدراسي، يجب أن تتحدث عن:", answers: ["مدى حبك لأصدقائك في الفصل.", "السبورة الذكية، والمقاعد، واللوحات التعليمية.", "موقع المدرسة في الشارع."], correct: 1 },
+  { question: "\"تنتشر الأشجار العالية على جانبي الطريق وتزين الزهور الملونة المداخل\". هذا النص يصف:", answers: ["شكل المكان ومحتوياته", "الفائدة التي تعلمناها", "عنوان الموضوع"], correct: 0 },
+  { question: "الجملة التي تصلح أن تكون \"خاتمة\" مميزة لموضوع عن مستشفى هي:", answers: ["المستشفى يقع في وسط المدينة.", "غرف المرضى مجهزة بأحدث الأجهزة.", "أدعو الله أن يشفي كل مريض ويعطيهم الصحة."], correct: 2 },
+  { question: "إذا طُلب منك كتابة تعبير عن \"مدينة العلمين\"، فجملة (تتميز المدينة بهواء نقي وشوارع نظيفة) تُعد من:", answers: ["الأمنيات", "تفاصيل المكان", "المقدمة"], correct: 1 },
+  { question: "الجزء الذي يُلخص التجربة الشخصية للكاتب ورأيه الخاص في المكان يسمى:", answers: ["الخاتمة", "اسم المكان", "تفاصيل المكان"], correct: 0 },
+  { question: "\"المستشفى يضم أقساماً متعددة يفصل بينها ممرات واسعة لتسهيل حركة الأطباء\". هذا الوصف يعكس:", answers: ["مشاعر الكاتب", "نظام المكان وشكله", "أمنية المريض"], correct: 1 },
+  { question: "عندما نكتب \"حديقة الحيوان بالجيزة\" في أعلى الصفحة بمنتصف السطر، فهذا يمثل:", answers: ["الانطباع", "اسم المكان", "الخاتمة"], correct: 1 }
+];
+
+writingPlaceDescriptionQuestions.quizTitle = "أسئلة على عناصر كتابة (وصف مكان)";
+
+const readingOceansTalkQuestions = [
+  { question: "ما الذي يُعد من أبرز مظاهر التلوث التي يمكن ملاحظتها على الشواطئ؟", answers: ["الأسماك الملونة فقط", "النفايات الملقاة", "السفن الكبيرة"], correct: 1 },
+  { question: "ماذا يهدد خطر التلوث في البحار والمحيطات؟", answers: ["يهدد الكائنات البحرية بالانقراض", "يهدد حركة الطائرات", "يهدد نمو الأشجار في الغابات"], correct: 0 },
+  { question: "ما هي أكثر المواد التي تلقى في البحر وتسبب التلوث؟", answers: ["الأخشاب والأوراق", "المواد البلاستيكية", "الزجاجات"], correct: 1 },
+  { question: "أي من المواد البلاستيكية التالية هي الأكثر انتشارا في البحار؟", answers: ["علب الطعام", "الزجاجات", "الأكياس البلاستيكية"], correct: 2 },
+  { question: "ما هي نسبة انتشار الأكياس البلاستيكية في البحار تقريبا؟", answers: ["10%", "14%", "20%"], correct: 1 },
+  { question: "كم المدة التي تبقى فيها المواد البلاستيكية في الماء؟", answers: ["أيام قليلة", "فترات طويلة", "بضع ساعات"], correct: 1 },
+  { question: "هل تتحلل المواد البلاستيكية في الماء بسهولة؟", answers: ["نعم، تتحلل بسرعة جدا", "لا، لا تتحلل بسهولة", "تتحلل في فصل الصيف فقط"], correct: 1 },
+  { question: "ماذا يحدث للسلاحف والأسماك عندما تبتلع المواد البلاستيكية؟", answers: ["يزداد حجمها وتنمو", "يؤدي إلى انسداد أجهزتها الهضمية أو اختناقها", "لا تتأثر أبدا"], correct: 1 },
+  { question: "لماذا بدأت مدن كثيرة في اتخاذ خطوات لحماية البيئة؟", answers: ["لزيادة عدد السياح", "للتقليل من خطر التلوث", "لبناء فنادق جديدة"], correct: 1 },
+  { question: "ما هي المدينة المصرية التي توقفت محلاتها ومطاعمها عن استخدام البلاستيك؟", answers: ["مدينة الإسكندرية", "مدينة العلمين", "مدينة دهب"], correct: 2 },
+  { question: "ما هو الشعار الجميل الذي رفعته مدينة دهب لحماية البيئة؟", answers: ["دهب مدينة السحر", "دهب بدون بلاستيك", "حافظوا على الشواطئ"], correct: 1 },
+  { question: "أي محافظة قررت منع استخدام الأكياس البلاستيكية في المحلات والصيدليات؟", answers: ["محافظة القاهرة", "محافظة جنوب سيناء", "محافظة البحر الأحمر"], correct: 2 },
+  { question: "ما الهدف من قرارات منع البلاستيك في هذه المدن والمحافظات؟", answers: ["توفير الأموال", "لتظل الشواطئ نظيفة وآمنة", "لتزيين الشوارع"], correct: 1 },
+  { question: "من يجب عليه حماية شواطئنا من التلوث؟", answers: ["واجب عمال النظافة فقط", "واجب الحكومة فقط", "واجبنا جميعا"], correct: 2 },
+  { question: "ماذا تفعل النفايات التي نرميها في البحر؟", answers: ["تطعم الأسماك", "تعرض الكائنات البحرية للخطر", "تجعل المياه صافية"], correct: 1 },
+  { question: "ما هي الفكرة الرئيسية التي يدور حولها النص؟", answers: ["السياحة في مصر", "حماية البيئة البحرية من التلوث البلاستيكي", "طرق صيد الأسماك"], correct: 1 },
+  { question: "ما مفرد كلمة \"المحيطات\"؟", answers: ["المحيط", "الإحاطة", "المحاط"], correct: 0 },
+  { question: "ما جمع كلمة \"خطر\"؟", answers: ["خطيرات", "أخطار", "مخاطر"], correct: 1 },
+  { question: "ما معنى كلمة \"حظرت\" في جملة (حظرت استخدامها في المطاعم)؟", answers: ["سمحت", "نشرت", "منعت"], correct: 2 },
+  { question: "ما مضاد كلمة \"حظرت\"؟", answers: ["سمحت / أجازت", "وافقت / رفضت", "عرفت / جهلت"], correct: 0 },
+  { question: "ما مضاد كلمة \"آمنة\" في جملة (لتظل شواطئها نظيفة وآمنة)؟", answers: ["مستقرة", "خطرة", "قريبة"], correct: 1 },
+  { question: "ما معنى كلمة \"الملقاة\" في جملة (النفايات الملقاة على الشواطئ)؟", answers: ["المرمية", "المحفوظة", "المجموعة"], correct: 0 },
+  { question: "ما معنى كلمة \"شعار\" في جملة (رفعت شعارا جميلا)؟", answers: ["قصة طويلة", "عبارة قصيرة أو علامة مميزة", "صورة كبيرة"], correct: 1 },
+  { question: "ما معنى كلمة \"تظل\" في جملة (لتظل شواطئها نظيفة)؟", answers: ["تبقى", "تتغير", "تذهب"], correct: 0 },
+  { question: "ما مضاد كلمة \"تظل\"؟", answers: ["تستمر", "تزول", "تكبر"], correct: 1 },
+  { question: "الكلمة التي تعني (عبارة قصيرة) من بين مفردات الدرس هي:", answers: ["نفايات", "شعار", "ملقاة"], correct: 1 },
+  { question: "أي من الكلمات التالية يعتبر مضادا لكلمة (سمحت)؟", answers: ["حظرت", "تظل", "يروي"], correct: 0 }
+];
+
+readingOceansTalkQuestions.quizTitle = "أسئلة على درس القراءة ( المحيطات تتحدث إلينا)";
 
 const readingSecondLessonQuestions = [
   { question: "متى حدثت القصة بين الأصدقاء؟", answers: ["في وقت الفسحة", "أثناء طابور الصباح", "بعد انتهاء اليوم الدراسي"], correct: 0 },
@@ -581,6 +769,12 @@ if (
 
   if (primaryGradeFourUnitTwo) {
     primaryGradeFourUnitTwo["درس الاستماع"] = listeningFactoryQuestions;
+    primaryGradeFourUnitTwo["درس القراءة الأول"] = readingDreamCityQuestions;
+    primaryGradeFourUnitTwo["درس القراءة الثاني"] = readingOceansTalkQuestions;
+    primaryGradeFourUnitTwo["القواعد النحوية الأول"] = grammarActorFormsQuestions;
+    primaryGradeFourUnitTwo["القواعد النحوية الثاني"] = grammarDualAndMasculinePluralQuestions;
+    primaryGradeFourUnitTwo["القواعد الإملائية"] = softAlifInNounsQuestions;
+    primaryGradeFourUnitTwo["التعبير الكتابي"] = writingPlaceDescriptionQuestions;
   }
 }
 
@@ -594,7 +788,10 @@ let answered = false;
 let selectedAnswer = null;
 let currentView = "home";
 
-const STORAGE_KEY = "ramadan-edu-state-v2";
+const SESSION_STORAGE_KEY = "ramadan-edu-session-state-v1";
+const LEGACY_STORAGE_KEY = "ramadan-edu-state-v2";
+const URL_VIEW_PARAM = "view";
+const URL_PATH_PARAM = "p";
 let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
@@ -827,7 +1024,115 @@ function getRemainingQuestionsCount() {
   return Math.max(0, questions.length - answeredCount);
 }
 
+function normalizePath(pathToUse = []) {
+  if (!Array.isArray(pathToUse)) return [];
+  return pathToUse.filter((item) => typeof item === "string" && item.length > 0);
+}
+
+function arePathsEqual(firstPath = [], secondPath = []) {
+  const safeFirst = normalizePath(firstPath);
+  const safeSecond = normalizePath(secondPath);
+  if (safeFirst.length !== safeSecond.length) return false;
+  return safeFirst.every((segment, idx) => segment === safeSecond[idx]);
+}
+
+function readStateFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const hasViewParam = params.has(URL_VIEW_PARAM);
+  const hasPathParam = params.has(URL_PATH_PARAM);
+  const rawView = params.get(URL_VIEW_PARAM);
+  const rawPath = params.getAll(URL_PATH_PARAM);
+  const safePath = normalizePath(rawPath);
+  const safeView = rawView === "app" || rawView === "about" ? rawView : "home";
+
+  return {
+    hasExplicitState: hasViewParam || hasPathParam,
+    view: safePath.length ? "app" : safeView,
+    path: safePath
+  };
+}
+
+function syncUrlWithState({ view = currentView, pathToUse = path } = {}) {
+  const safeView = view === "app" || view === "about" ? view : "home";
+  const safePath = safeView === "app" ? normalizePath(pathToUse) : [];
+  const url = new URL(window.location.href);
+
+  if (safeView === "home" && !safePath.length) {
+    url.searchParams.delete(URL_VIEW_PARAM);
+  } else {
+    url.searchParams.set(URL_VIEW_PARAM, safeView);
+  }
+
+  url.searchParams.delete(URL_PATH_PARAM);
+  safePath.forEach((segment) => {
+    url.searchParams.append(URL_PATH_PARAM, segment);
+  });
+
+  const nextUrl = `${url.pathname}${url.search}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}`;
+
+  if (nextUrl !== currentUrl) {
+    window.history.replaceState(null, "", nextUrl);
+  }
+}
+
+function restoreFromUrlState(urlState) {
+  stopQuizTimer({ reset: true });
+  quizElapsedBeforeCurrentRun = 0;
+
+  const safeView = urlState && (urlState.view === "app" || urlState.view === "about") ? urlState.view : "home";
+  const safePath = normalizePath(urlState && urlState.path ? urlState.path : []);
+
+  if (safeView === "about") {
+    path = [];
+    quizTitle = "";
+    setActiveView("about");
+    saveState();
+    return;
+  }
+
+  if (safeView === "app") {
+    setActiveView("app");
+    path = [...safePath];
+
+    while (path.length && getCurrentNode(path) === null) {
+      path.pop();
+    }
+
+    if (!path.length) {
+      title.textContent = ROOT_TITLE;
+      quizTitle = "";
+      showMenu(data);
+      backBtn.style.display = "none";
+      setLessonWatermarkVisibility(false);
+      saveState();
+      return;
+    }
+
+    const current = getCurrentNode(path);
+    title.textContent = getNavigationTitle(current);
+    backBtn.style.display = "block";
+
+    if (Array.isArray(current)) {
+      startQuiz(current);
+    } else {
+      quizTitle = "";
+      showMenu(current);
+      setLessonWatermarkVisibility(false);
+      saveState();
+    }
+    return;
+  }
+
+  path = [];
+  quizTitle = "";
+  setActiveView("home");
+  saveState();
+}
+
 function saveState(){
+  syncUrlWithState({ view: currentView, pathToUse: path });
+
   const state = {
     view: currentView,
     path: [...path],
@@ -839,7 +1144,11 @@ function saveState(){
     finished: Array.isArray(questions) && questions.length > 0 && index >= questions.length
   };
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    // تجاهل أخطاء التخزين المؤقت في المتصفح.
+  }
 }
 
 // عرض القوائم
@@ -1053,18 +1362,56 @@ function restoreState(){
   nextBtn.style.display = "none";
   setActiveView("home");
 
-  const rawState = localStorage.getItem(STORAGE_KEY);
+  try {
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
+  } catch (error) {
+    // تجاهل أخطاء التخزين في المتصفح.
+  }
+
+  const navigationEntry = performance.getEntriesByType("navigation")[0];
+  const navigationType = navigationEntry && typeof navigationEntry.type === "string"
+    ? navigationEntry.type
+    : "navigate";
+  const isReload = navigationType === "reload";
+
+  // أي دخول جديد يبدأ من الرئيسية، والاستمرار فقط عند إعادة التحميل.
+  if (!isReload) {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    path = [];
+    quizTitle = "";
+    setActiveView("home");
+    saveState();
+    return;
+  }
+
+  const urlState = readStateFromUrl();
+  const rawState = sessionStorage.getItem(SESSION_STORAGE_KEY);
+
   if (!rawState) {
+    if (urlState.hasExplicitState) {
+      restoreFromUrlState(urlState);
+    }
     return;
   }
 
   try {
     const saved = JSON.parse(rawState);
+    const savedView = saved.view === "app" || saved.view === "about" ? saved.view : "home";
+    const savedPath = normalizePath(saved.path);
+
+    const shouldUseUrlState =
+      urlState.hasExplicitState &&
+      (urlState.view !== savedView || !arePathsEqual(urlState.path, savedPath));
+
+    if (shouldUseUrlState) {
+      restoreFromUrlState(urlState);
+      return;
+    }
+
     stopQuizTimer({ reset: true });
     quizElapsedBeforeCurrentRun = Number.isFinite(saved.elapsedTimeMs) ? Math.max(0, saved.elapsedTimeMs) : 0;
-
-    currentView = saved.view === "app" || saved.view === "about" ? saved.view : "home";
-    path = Array.isArray(saved.path) ? saved.path.filter((item) => typeof item === "string") : [];
+    currentView = savedView;
+    path = [...savedPath];
 
     while (path.length && getCurrentNode(path) === null) {
       path.pop();
@@ -1073,6 +1420,7 @@ function restoreState(){
     if (currentView === "about") {
       quizTitle = "";
       setActiveView("about");
+      saveState();
       return;
     }
 
@@ -1136,12 +1484,26 @@ function restoreState(){
     }
 
     setActiveView("home");
+    saveState();
   } catch (error) {
-    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
     path = [];
+
+    if (urlState.hasExplicitState) {
+      restoreFromUrlState(urlState);
+      return;
+    }
+
     setActiveView("home");
+    saveState();
   }
 }
 
 restoreState();
+
+window.addEventListener("pageshow", (event) => {
+  if (!event.persisted) return;
+  sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  backToHome();
+});
 
