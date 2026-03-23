@@ -806,6 +806,134 @@ let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
 let quizTimerIntervalId = null;
+const VISITOR_NAMESPACE = "ramadan-farhat-site";
+const VISITOR_TOTAL_KEY = "total-visits-v1";
+const VISITOR_DAILY_PREFIX = "daily-visits-v1";
+const VISITOR_SESSION_MARKER = "ramadan-visitor-counted-v1";
+const VISITOR_FETCH_TIMEOUT_MS = 5000;
+
+function getTodayVisitorKey() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${VISITOR_DAILY_PREFIX}-${year}-${month}-${day}`;
+}
+
+function buildVisitorApiUrl(type, key) {
+  return `https://api.countapi.xyz/${type}/${VISITOR_NAMESPACE}/${encodeURIComponent(key)}`;
+}
+
+function hasCountedCurrentSessionVisit() {
+  try {
+    return sessionStorage.getItem(VISITOR_SESSION_MARKER) === "1";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markCurrentSessionVisitAsCounted() {
+  try {
+    sessionStorage.setItem(VISITOR_SESSION_MARKER, "1");
+  } catch (error) {
+    // تجاهل أخطاء التخزين في المتصفح.
+  }
+}
+
+async function fetchVisitorValue(type, key) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, VISITOR_FETCH_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(buildVisitorApiUrl(type, key), { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`Visitor API error: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    if (!payload || typeof payload.value !== "number") {
+      throw new Error("Invalid visitor payload");
+    }
+
+    return payload.value;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function formatVisitorNumber(value) {
+  return new Intl.NumberFormat("ar-EG").format(value);
+}
+
+function updateVisitorsUi({ totalValue, dailyValue, note }) {
+  if (totalVisitorsNode) {
+    totalVisitorsNode.textContent = formatVisitorNumber(totalValue);
+  }
+  if (todayVisitorsNode) {
+    todayVisitorsNode.textContent = formatVisitorNumber(dailyValue);
+  }
+  if (visitorsNoteNode && typeof note === "string") {
+    visitorsNoteNode.textContent = note;
+  }
+}
+
+function showVisitorsFallback(noteText) {
+  if (totalVisitorsNode) {
+    totalVisitorsNode.textContent = "--";
+  }
+  if (todayVisitorsNode) {
+    todayVisitorsNode.textContent = "--";
+  }
+  if (visitorsNoteNode) {
+    visitorsNoteNode.textContent = noteText;
+  }
+}
+
+async function loadVisitorsStats() {
+  if (!totalVisitorsNode || !todayVisitorsNode || !visitorsNoteNode) {
+    return;
+  }
+
+  visitorsNoteNode.textContent = "جار تحميل الإحصائيات...";
+
+  const dailyKey = getTodayVisitorKey();
+  const shouldCountVisit = !hasCountedCurrentSessionVisit();
+  const requestType = shouldCountVisit ? "hit" : "get";
+
+  try {
+    const [totalValue, dailyValue] = await Promise.all([
+      fetchVisitorValue(requestType, VISITOR_TOTAL_KEY),
+      fetchVisitorValue(requestType, dailyKey)
+    ]);
+
+    if (shouldCountVisit) {
+      markCurrentSessionVisitAsCounted();
+    }
+
+    updateVisitorsUi({
+      totalValue,
+      dailyValue,
+      note: shouldCountVisit ? "تم تحديث الإحصائيات لهذه الزيارة." : "إحصائيات محدثة."
+    });
+  } catch (error) {
+    try {
+      const [totalValue, dailyValue] = await Promise.all([
+        fetchVisitorValue("get", VISITOR_TOTAL_KEY),
+        fetchVisitorValue("get", dailyKey)
+      ]);
+
+      updateVisitorsUi({
+        totalValue,
+        dailyValue,
+        note: "تعذر تحديث العداد الآن، وتم عرض آخر إحصائية متاحة."
+      });
+    } catch (fallbackError) {
+      showVisitorsFallback("تعذر تحميل الإحصائيات الآن. يرجى المحاولة لاحقًا.");
+    }
+  }
+}
 
 function getAudioContext() {
   const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -974,6 +1102,9 @@ const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
 const topWatermark = document.querySelector(".watermark-top");
 const lessonWatermark = document.querySelector(".watermark-lesson");
+const totalVisitorsNode = document.getElementById("totalVisitors");
+const todayVisitorsNode = document.getElementById("todayVisitors");
+const visitorsNoteNode = document.getElementById("visitorsNote");
 
 homeBtn.onclick = backToHome;
 
@@ -1613,6 +1744,7 @@ function restoreState(){
   }
 }
 
+loadVisitorsStats();
 restoreState();
 
 window.addEventListener("pageshow", (event) => {
