@@ -790,8 +790,15 @@ let currentView = "home";
 
 const SESSION_STORAGE_KEY = "ramadan-edu-session-state-v1";
 const LEGACY_STORAGE_KEY = "ramadan-edu-state-v2";
-const URL_VIEW_PARAM = "view";
-const URL_PATH_PARAM = "p";
+const URL_VIEW_PARAM = "v";
+const URL_STAGE_PARAM = "st";
+const URL_TERM_PARAM = "tm";
+const URL_GRADE_PARAM = "gr";
+const URL_UNIT_PARAM = "un";
+const URL_LESSON_PARAM = "ls";
+const URL_PATH_LEVEL_PARAMS = [URL_STAGE_PARAM, URL_TERM_PARAM, URL_GRADE_PARAM, URL_UNIT_PARAM, URL_LESSON_PARAM];
+const LEGACY_URL_VIEW_PARAM = "view";
+const LEGACY_URL_PATH_PARAM = "p";
 let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
@@ -1036,17 +1043,76 @@ function arePathsEqual(firstPath = [], secondPath = []) {
   return safeFirst.every((segment, idx) => segment === safeSecond[idx]);
 }
 
+function parsePositiveIndex(value) {
+  if (typeof value !== "string" || !/^\d+$/.test(value)) return null;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) return null;
+  return parsed;
+}
+
+function decodePathFromCompactParams(params) {
+  const resolvedPath = [];
+
+  for (const levelParam of URL_PATH_LEVEL_PARAMS) {
+    if (!params.has(levelParam)) break;
+
+    const parsedIndex = parsePositiveIndex(params.get(levelParam));
+    if (parsedIndex === null) break;
+
+    const current = getCurrentNode(resolvedPath);
+    if (!current || typeof current !== "object" || Array.isArray(current)) break;
+
+    const keys = Object.keys(current);
+    const key = keys[parsedIndex - 1];
+    if (!key) break;
+
+    resolvedPath.push(key);
+  }
+
+  return resolvedPath;
+}
+
+function encodePathToCompactIndices(pathToUse = path) {
+  const safePath = normalizePath(pathToUse);
+  const encodedIndices = [];
+  const walkedPath = [];
+
+  for (const segment of safePath) {
+    const current = getCurrentNode(walkedPath);
+    if (!current || typeof current !== "object" || Array.isArray(current)) break;
+
+    const keys = Object.keys(current);
+    const segmentIndex = keys.indexOf(segment);
+    if (segmentIndex === -1) break;
+
+    encodedIndices.push(segmentIndex + 1);
+    walkedPath.push(segment);
+
+    if (encodedIndices.length >= URL_PATH_LEVEL_PARAMS.length) break;
+  }
+
+  return encodedIndices;
+}
+
 function readStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  const hasViewParam = params.has(URL_VIEW_PARAM);
-  const hasPathParam = params.has(URL_PATH_PARAM);
-  const rawView = params.get(URL_VIEW_PARAM);
-  const rawPath = params.getAll(URL_PATH_PARAM);
-  const safePath = normalizePath(rawPath);
-  const safeView = rawView === "app" || rawView === "about" ? rawView : "home";
+  const hasCompactPathParam = URL_PATH_LEVEL_PARAMS.some((param) => params.has(param));
+  const hasLegacyPathParam = params.has(LEGACY_URL_PATH_PARAM);
+  const hasViewParam = params.has(URL_VIEW_PARAM) || params.has(LEGACY_URL_VIEW_PARAM);
+  const rawView = params.get(URL_VIEW_PARAM) || params.get(LEGACY_URL_VIEW_PARAM);
+
+  let safePath = [];
+  if (hasCompactPathParam) {
+    safePath = decodePathFromCompactParams(params);
+  } else if (hasLegacyPathParam) {
+    safePath = normalizePath(params.getAll(LEGACY_URL_PATH_PARAM));
+  }
+
+  const normalizedRawView = rawView === "a" ? "about" : rawView;
+  const safeView = normalizedRawView === "app" || normalizedRawView === "about" ? normalizedRawView : "home";
 
   return {
-    hasExplicitState: hasViewParam || hasPathParam,
+    hasExplicitState: hasViewParam || hasCompactPathParam || hasLegacyPathParam,
     view: safePath.length ? "app" : safeView,
     path: safePath
   };
@@ -1055,18 +1121,23 @@ function readStateFromUrl() {
 function syncUrlWithState({ view = currentView, pathToUse = path } = {}) {
   const safeView = view === "app" || view === "about" ? view : "home";
   const safePath = safeView === "app" ? normalizePath(pathToUse) : [];
+  const encodedPathIndices = safeView === "app" ? encodePathToCompactIndices(safePath) : [];
   const url = new URL(window.location.href);
 
-  if (safeView === "home" && !safePath.length) {
-    url.searchParams.delete(URL_VIEW_PARAM);
-  } else {
-    url.searchParams.set(URL_VIEW_PARAM, safeView);
-  }
-
-  url.searchParams.delete(URL_PATH_PARAM);
-  safePath.forEach((segment) => {
-    url.searchParams.append(URL_PATH_PARAM, segment);
+  [URL_VIEW_PARAM, LEGACY_URL_VIEW_PARAM, LEGACY_URL_PATH_PARAM, ...URL_PATH_LEVEL_PARAMS].forEach((param) => {
+    url.searchParams.delete(param);
   });
+
+  if (safeView === "about") {
+    url.searchParams.set(URL_VIEW_PARAM, "about");
+  } else if (safeView === "app") {
+    url.searchParams.set(URL_VIEW_PARAM, "app");
+    encodedPathIndices.forEach((value, idx) => {
+      const paramName = URL_PATH_LEVEL_PARAMS[idx];
+      if (!paramName) return;
+      url.searchParams.set(paramName, String(value));
+    });
+  }
 
   const nextUrl = `${url.pathname}${url.search}`;
   const currentUrl = `${window.location.pathname}${window.location.search}`;
