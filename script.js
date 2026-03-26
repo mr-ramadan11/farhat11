@@ -195,6 +195,39 @@ primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"] = 
     { question: 'سأل المعلم الطلاب: ...... موعد بداية الاختبار النهائي؟', answers: ["متا", "متى", "متي"], correct: 1 },
     { question: 'قدمت الإدارة ...... قيمة للأطفال في الـ ......', answers: ["هدايى / مستشفا", "هدايا / مستشفى", "هدايا / مستشفا"], correct: 1 }
 ];
+
+const reviewSectionMarkers = [
+  { question: 'مضاد كلمة "الوجود"', title: "أسئلة على النص الشعري (مصر لنا منذ القدم)" },
+  { question: "لماذا شعر يوسف بالحزن عندما استيقظ متعباً ونصحه الطبيب بالراحة؟", title: "أسئلة على نص الاستماع (نافذة الصداقة)" },
+  { question: "لماذا كانت الطفلة الصغيرة تبكي عندما تقترب الفراشات من شعرها؟", title: "أسئلة على درس القراءة (هل فكرت قبل أن تنشر؟)" },
+  { question: 'أين كان الأصدقاء يلعبون وقت الفسحة في درس "كلمات تبني وكلمات تهدم"؟', title: "أسئلة على درس القراءة (كلمات تبني وكلمات تهدم)" },
+  { question: '"أصوات العصافير في الصباح الباكر لحن جميل". كلمة (أصوات) مبتدأ مرفوع بالضمة لأنه:', title: "أسئلة على الجملة الاسمية" },
+  { question: "يشرح الدرس ببراعة واهتمام المعلم المتميز. الفاعل في الجملة السابقة هو:", title: "أسئلة على الجملة الفعلية" },
+  { question: "توكأ جدي على ...... غليظة أثناء مشيه في الحديقة.", title: "أسئلة على الألف اللينة" }
+];
+
+function applyReviewSections(questionsList, markers) {
+  if (!Array.isArray(questionsList) || !Array.isArray(markers) || !markers.length) return;
+
+  let markerIndex = 0;
+  let currentSectionTitle = markers[0].title;
+
+  questionsList.forEach((questionItem) => {
+    if (!questionItem || typeof questionItem !== "object") return;
+
+    if (
+      markerIndex < markers.length &&
+      questionItem.question === markers[markerIndex].question
+    ) {
+      currentSectionTitle = markers[markerIndex].title;
+      markerIndex++;
+    }
+
+    questionItem.sectionTitle = currentSectionTitle || "";
+  });
+}
+
+applyReviewSections(primary["الصف الرابع"]["الوحدة الأولى"]["مراجعة"], reviewSectionMarkers);
  
 // ✨ تعديل الوحدة الثالثة (المرحلة الابتدائية)
 Object.keys(primary).forEach(grade => {
@@ -806,133 +839,105 @@ let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
 let quizTimerIntervalId = null;
-const VISITOR_NAMESPACE = "ramadan-farhat-site";
-const VISITOR_TOTAL_KEY = "total-visits-v1";
-const VISITOR_DAILY_PREFIX = "daily-visits-v1";
-const VISITOR_SESSION_MARKER = "ramadan-visitor-counted-v1";
-const VISITOR_FETCH_TIMEOUT_MS = 5000;
 
-function getTodayVisitorKey() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${VISITOR_DAILY_PREFIX}-${year}-${month}-${day}`;
+function shuffleArrayInPlace(items) {
+  if (!Array.isArray(items)) return items;
+
+  for (let i = items.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [items[i], items[randomIndex]] = [items[randomIndex], items[i]];
+  }
+
+  return items;
 }
 
-function buildVisitorApiUrl(type, key) {
-  return `https://api.countapi.xyz/${type}/${VISITOR_NAMESPACE}/${encodeURIComponent(key)}`;
+function cloneQuizQuestion(rawQuestion) {
+  if (!rawQuestion || typeof rawQuestion !== "object") return null;
+  if (typeof rawQuestion.question !== "string" || !Array.isArray(rawQuestion.answers)) return null;
+
+  const answers = rawQuestion.answers.filter((answer) => typeof answer === "string");
+  if (!answers.length) return null;
+
+  const correct = Number.isInteger(rawQuestion.correct) && rawQuestion.correct >= 0 && rawQuestion.correct < answers.length
+    ? rawQuestion.correct
+    : 0;
+
+  return {
+    question: rawQuestion.question,
+    answers: [...answers],
+    correct,
+    sectionTitle: typeof rawQuestion.sectionTitle === "string" ? rawQuestion.sectionTitle : ""
+  };
 }
 
-function hasCountedCurrentSessionVisit() {
-  try {
-    return sessionStorage.getItem(VISITOR_SESSION_MARKER) === "1";
-  } catch (error) {
-    return false;
-  }
+function shuffleAnswersForQuestion(questionItem) {
+  const options = questionItem.answers.map((answer, index) => ({
+    answer,
+    isCorrect: index === questionItem.correct
+  }));
+
+  shuffleArrayInPlace(options);
+
+  return {
+    ...questionItem,
+    answers: options.map((option) => option.answer),
+    correct: options.findIndex((option) => option.isCorrect)
+  };
 }
 
-function markCurrentSessionVisitAsCounted() {
-  try {
-    sessionStorage.setItem(VISITOR_SESSION_MARKER, "1");
-  } catch (error) {
-    // تجاهل أخطاء التخزين في المتصفح.
-  }
-}
+function prepareQuizQuestions(rawQuestions) {
+  if (!Array.isArray(rawQuestions)) return [];
 
-async function fetchVisitorValue(type, key) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, VISITOR_FETCH_TIMEOUT_MS);
+  const normalizedQuestions = rawQuestions
+    .map(cloneQuizQuestion)
+    .filter((questionItem) => questionItem !== null);
 
-  try {
-    const response = await fetch(buildVisitorApiUrl(type, key), { signal: controller.signal });
-    if (!response.ok) {
-      throw new Error(`Visitor API error: ${response.status}`);
-    }
+  if (!normalizedQuestions.length) return [];
 
-    const payload = await response.json();
-    if (!payload || typeof payload.value !== "number") {
-      throw new Error("Invalid visitor payload");
-    }
+  const hasSections = normalizedQuestions.some(
+    (questionItem) => typeof questionItem.sectionTitle === "string" && questionItem.sectionTitle.trim().length > 0
+  );
 
-    return payload.value;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
+  const finalOrder = [];
 
-function formatVisitorNumber(value) {
-  return new Intl.NumberFormat("ar-EG").format(value);
-}
+  if (hasSections) {
+    // للحفاظ على ترتيب الأقسام كما هو، مع خلط الأسئلة داخل كل قسم.
+    const sectionsInOrder = [];
+    const sectionMap = new Map();
 
-function updateVisitorsUi({ totalValue, dailyValue, note }) {
-  if (totalVisitorsNode) {
-    totalVisitorsNode.textContent = formatVisitorNumber(totalValue);
-  }
-  if (todayVisitorsNode) {
-    todayVisitorsNode.textContent = formatVisitorNumber(dailyValue);
-  }
-  if (visitorsNoteNode && typeof note === "string") {
-    visitorsNoteNode.textContent = note;
-  }
-}
-
-function showVisitorsFallback(noteText) {
-  if (totalVisitorsNode) {
-    totalVisitorsNode.textContent = "--";
-  }
-  if (todayVisitorsNode) {
-    todayVisitorsNode.textContent = "--";
-  }
-  if (visitorsNoteNode) {
-    visitorsNoteNode.textContent = noteText;
-  }
-}
-
-async function loadVisitorsStats() {
-  if (!totalVisitorsNode || !todayVisitorsNode || !visitorsNoteNode) {
-    return;
-  }
-
-  visitorsNoteNode.textContent = "جار تحميل الإحصائيات...";
-
-  const dailyKey = getTodayVisitorKey();
-  const shouldCountVisit = !hasCountedCurrentSessionVisit();
-  const requestType = shouldCountVisit ? "hit" : "get";
-
-  try {
-    const [totalValue, dailyValue] = await Promise.all([
-      fetchVisitorValue(requestType, VISITOR_TOTAL_KEY),
-      fetchVisitorValue(requestType, dailyKey)
-    ]);
-
-    if (shouldCountVisit) {
-      markCurrentSessionVisitAsCounted();
-    }
-
-    updateVisitorsUi({
-      totalValue,
-      dailyValue,
-      note: shouldCountVisit ? "تم تحديث الإحصائيات لهذه الزيارة." : "إحصائيات محدثة."
+    normalizedQuestions.forEach((questionItem) => {
+      const sectionKey = (questionItem.sectionTitle || "").trim();
+      if (!sectionMap.has(sectionKey)) {
+        sectionMap.set(sectionKey, []);
+        sectionsInOrder.push(sectionKey);
+      }
+      sectionMap.get(sectionKey).push(questionItem);
     });
-  } catch (error) {
-    try {
-      const [totalValue, dailyValue] = await Promise.all([
-        fetchVisitorValue("get", VISITOR_TOTAL_KEY),
-        fetchVisitorValue("get", dailyKey)
-      ]);
 
-      updateVisitorsUi({
-        totalValue,
-        dailyValue,
-        note: "تعذر تحديث العداد الآن، وتم عرض آخر إحصائية متاحة."
-      });
-    } catch (fallbackError) {
-      showVisitorsFallback("تعذر تحميل الإحصائيات الآن. يرجى المحاولة لاحقًا.");
-    }
+    sectionsInOrder.forEach((sectionKey) => {
+      const sectionQuestions = sectionMap.get(sectionKey) || [];
+      shuffleArrayInPlace(sectionQuestions);
+      finalOrder.push(...sectionQuestions);
+    });
+  } else {
+    finalOrder.push(...normalizedQuestions);
+    shuffleArrayInPlace(finalOrder);
   }
+
+  return finalOrder.map(shuffleAnswersForQuestion);
+}
+
+function normalizeQuizQuestionsSnapshot(snapshot, expectedLength = null) {
+  if (!Array.isArray(snapshot)) return null;
+
+  const normalized = snapshot
+    .map(cloneQuizQuestion)
+    .filter((questionItem) => questionItem !== null);
+
+  if (!normalized.length) return null;
+  if (Number.isInteger(expectedLength) && expectedLength >= 0 && normalized.length !== expectedLength) return null;
+
+  return normalized;
 }
 
 function getAudioContext() {
@@ -1102,9 +1107,6 @@ const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
 const topWatermark = document.querySelector(".watermark-top");
 const lessonWatermark = document.querySelector(".watermark-lesson");
-const totalVisitorsNode = document.getElementById("totalVisitors");
-const todayVisitorsNode = document.getElementById("todayVisitors");
-const visitorsNoteNode = document.getElementById("visitorsNote");
 
 homeBtn.onclick = backToHome;
 
@@ -1372,6 +1374,8 @@ function restoreFromUrlState(urlState) {
 function saveState(){
   syncUrlWithState({ view: currentView, pathToUse: path });
 
+  const isQuizActive = Array.isArray(questions) && questions.length > 0 && Array.isArray(getCurrentNode(path));
+
   const state = {
     view: currentView,
     path: [...path],
@@ -1379,6 +1383,7 @@ function saveState(){
     score,
     answered,
     selectedAnswer,
+    quizQuestionsSnapshot: isQuizActive ? questions : null,
     elapsedTimeMs: getElapsedTimeMs(),
     finished: Array.isArray(questions) && questions.length > 0 && index >= questions.length
   };
@@ -1453,7 +1458,7 @@ backBtn.onclick = () => {
 
 // بدء الاختبار
 function startQuiz(qs){
-  questions = qs;
+  questions = prepareQuizQuestions(qs);
   quizTitle = qs.quizTitle || "";
   index = 0;
   score = 0;
@@ -1501,6 +1506,22 @@ function renderFinalResult() {
   content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="final-result">مدة حل الأسئلة: ${elapsed}</h3>`;
 }
 
+function getSectionHeadingHtml() {
+  if (!Array.isArray(questions) || !questions.length || index < 0 || index >= questions.length) {
+    return "";
+  }
+
+  const currentSection = typeof questions[index].sectionTitle === "string" ? questions[index].sectionTitle.trim() : "";
+  if (!currentSection) return "";
+
+  const previousSection = index > 0 && questions[index - 1] && typeof questions[index - 1].sectionTitle === "string"
+    ? questions[index - 1].sectionTitle.trim()
+    : "";
+
+  if (index > 0 && currentSection === previousSection) return "";
+  return `<h4 class="quiz-section">${currentSection}</h4>`;
+}
+
 // تحميل سؤال
 function loadQuestion(){
   if (!questions.length) {
@@ -1528,8 +1549,9 @@ function loadQuestion(){
 
   const q = questions[index];
   const headingHtml = quizTitle ? `<h3 class="quiz-heading">${quizTitle}</h3>` : "";
+  const sectionHeadingHtml = getSectionHeadingHtml();
 
-  content.innerHTML = `${headingHtml}${getQuizMetaHtml()}<h3 class="question">${q.question}</h3>`;
+  content.innerHTML = `${headingHtml}${sectionHeadingHtml}${getQuizMetaHtml()}<h3 class="question">${q.question}</h3>`;
 
   q.answers.forEach((a,i) => {
     const btn = document.createElement("button");
@@ -1688,8 +1710,13 @@ function restoreState(){
       backBtn.style.display = "block";
 
       if (Array.isArray(current)) {
-        questions = current;
-        quizTitle = questions.quizTitle || "";
+        const restoredQuestions = normalizeQuizQuestionsSnapshot(
+          saved.quizQuestionsSnapshot,
+          current.length
+        );
+
+        questions = restoredQuestions || prepareQuizQuestions(current);
+        quizTitle = current.quizTitle || "";
         setLessonWatermarkVisibility(true);
         const maxSavedIndex = saved.finished ? questions.length : Math.max(questions.length - 1, 0);
         index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, maxSavedIndex)) : 0;
@@ -1744,7 +1771,6 @@ function restoreState(){
   }
 }
 
-loadVisitorsStats();
 restoreState();
 
 window.addEventListener("pageshow", (event) => {
