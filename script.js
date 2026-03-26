@@ -1513,12 +1513,6 @@ function getSectionHeadingHtml() {
 
   const currentSection = typeof questions[index].sectionTitle === "string" ? questions[index].sectionTitle.trim() : "";
   if (!currentSection) return "";
-
-  const previousSection = index > 0 && questions[index - 1] && typeof questions[index - 1].sectionTitle === "string"
-    ? questions[index - 1].sectionTitle.trim()
-    : "";
-
-  if (index > 0 && currentSection === previousSection) return "";
   return `<h4 class="quiz-section">${currentSection}</h4>`;
 }
 
