@@ -698,6 +698,12 @@ button {
   border-color:#fecaca;
 }
 
+#content .essay-feedback.is-pending {
+  color:#0f4c97;
+  background:#eef6ff;
+  border-color:#cfe4ff;
+}
+
 #content .essay-model-answer {
   margin-top:6px;
   font-weight:600;

@@ -2,7 +2,13 @@
 function startApp(){
   stopQuizTimer({ reset: true });
   path = [];
+  questions = [];
   quizTitle = "";
+  index = 0;
+  score = 0;
+  answered = false;
+  selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
   setActiveView("app");
   title.textContent = ROOT_TITLE;
   showMenu(data);
@@ -26,6 +32,7 @@ function backToHome(){
   score = 0;
   answered = false;
   selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
   title.textContent = ROOT_TITLE;
   showMenu(data);
   backBtn.style.display = "none";
@@ -890,6 +897,7 @@ let index = 0;
 let score = 0;
 let answered = false;
 let selectedAnswer = null;
+let selectedAnswerIsCorrect = null;
 let currentView = "home";
 
 const SESSION_STORAGE_KEY = "ramadan-edu-session-state-v1";
@@ -906,6 +914,10 @@ const URL_ROUTE_PARAM = "r";
 const URL_PATH_LEVEL_PARAMS = [URL_STAGE_PARAM, URL_TERM_PARAM, URL_GRADE_PARAM, URL_UNIT_PARAM, URL_LESSON_PARAM];
 const LEGACY_URL_VIEW_PARAM = "view";
 const LEGACY_URL_PATH_PARAM = "p";
+const GEMINI_API_KEY_STORAGE_KEY = "gemini-api-key";
+const GEMINI_MODEL_NAME = "gemini-2.0-flash";
+const GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
+let hasPromptedForGeminiApiKey = false;
 let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
@@ -1174,6 +1186,159 @@ function isEssayAnswerCorrect(questionItem, userAnswer) {
   }
 
   return matchesKeywordGroups(normalizedUserAnswer, questionItem.keywordGroups);
+}
+
+function getGeminiApiKey({ allowPrompt = false } = {}) {
+  if (typeof window !== "undefined" && typeof window.GEMINI_API_KEY === "string" && window.GEMINI_API_KEY.trim()) {
+    return window.GEMINI_API_KEY.trim();
+  }
+
+  try {
+    const savedApiKey = localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY);
+    if (typeof savedApiKey === "string" && savedApiKey.trim()) {
+      return savedApiKey.trim();
+    }
+  } catch (error) {
+    // تجاهل أخطاء التخزين المحلي.
+  }
+
+  if (!allowPrompt || hasPromptedForGeminiApiKey || typeof window === "undefined") {
+    return "";
+  }
+
+  hasPromptedForGeminiApiKey = true;
+  const enteredApiKey = window.prompt("للتصحيح بالذكاء الاصطناعي (Gemini)، أدخل مفتاح API. اتركه فارغًا لاستخدام التصحيح المحلي.", "");
+  if (!enteredApiKey || !enteredApiKey.trim()) return "";
+
+  const safeApiKey = enteredApiKey.trim();
+  try {
+    localStorage.setItem(GEMINI_API_KEY_STORAGE_KEY, safeApiKey);
+  } catch (error) {
+    // تجاهل أخطاء التخزين المحلي.
+  }
+  return safeApiKey;
+}
+
+function extractJsonFromText(rawText) {
+  if (typeof rawText !== "string") return null;
+  const trimmed = rawText.trim();
+  if (!trimmed) return null;
+
+  const textWithoutCodeFence = trimmed
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  try {
+    return JSON.parse(textWithoutCodeFence);
+  } catch (error) {
+    // نكمل بمحاولة استخراج أول كائن JSON صالح من النص.
+  }
+
+  const match = textWithoutCodeFence.match(/\{[\s\S]*\}/);
+  if (!match) return null;
+
+  try {
+    return JSON.parse(match[0]);
+  } catch (error) {
+    return null;
+  }
+}
+
+function extractGeminiText(payload) {
+  if (!payload || !Array.isArray(payload.candidates) || !payload.candidates.length) return "";
+  const firstCandidate = payload.candidates[0];
+  const parts = firstCandidate && firstCandidate.content && Array.isArray(firstCandidate.content.parts)
+    ? firstCandidate.content.parts
+    : [];
+
+  return parts
+    .map((part) => (part && typeof part.text === "string" ? part.text : ""))
+    .join("\n")
+    .trim();
+}
+
+function buildGeminiEssayPrompt(questionItem, userAnswer) {
+  const expectedAnswers = Array.isArray(questionItem.acceptedAnswers) ? questionItem.acceptedAnswers : [];
+  const keywordGroups = Array.isArray(questionItem.keywordGroups) ? questionItem.keywordGroups : [];
+  const modelAnswer = typeof questionItem.modelAnswer === "string" ? questionItem.modelAnswer : "";
+
+  return [
+    "أنت مصحح عربي خبير للصف الرابع الابتدائي.",
+    "المطلوب: قيّم إجابة طالب على سؤال مقالي قصير.",
+    "قواعد التصحيح:",
+    "1) صحّح بالمعنى وليس بالحرف.",
+    "2) تقبل الأخطاء الإملائية البسيطة إذا كان المعنى صحيحاً.",
+    "3) تقبل أي صياغة بديلة صحيحة حتى لو لم تطابق النص الحرفي.",
+    "4) لا تتشدد في التشكيل أو علامات الترقيم.",
+    "أعد النتيجة بصيغة JSON فقط بدون أي نص إضافي بهذه البنية:",
+    "{\"isCorrect\": true/false, \"feedback\": \"تعليق عربي قصير\"}",
+    "",
+    `السؤال: ${questionItem.question}`,
+    `إجابة الطالب: ${userAnswer}`,
+    `نماذج إجابة مرجعية: ${JSON.stringify(expectedAnswers)}`,
+    `مجموعات كلمات مفتاحية (كل مجموعة يجب أن يتحقق معناها): ${JSON.stringify(keywordGroups)}`,
+    `نموذج الإجابة المدرسي: ${modelAnswer}`
+  ].join("\n");
+}
+
+async function gradeEssayWithGemini(questionItem, userAnswer, { allowPrompt = true } = {}) {
+  const apiKey = getGeminiApiKey({ allowPrompt });
+  if (!apiKey) return null;
+
+  const requestUrl = `${GEMINI_API_BASE_URL}/${encodeURIComponent(GEMINI_MODEL_NAME)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const requestBody = {
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: buildGeminiEssayPrompt(questionItem, userAnswer) }]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.1,
+      maxOutputTokens: 220
+    }
+  };
+
+  const response = await fetch(requestUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestBody)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Gemini API request failed with status ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const rawText = extractGeminiText(payload);
+  const parsed = extractJsonFromText(rawText);
+  if (!parsed || typeof parsed !== "object") return null;
+  if (typeof parsed.isCorrect !== "boolean") return null;
+
+  return {
+    isCorrect: parsed.isCorrect,
+    feedback: typeof parsed.feedback === "string" ? parsed.feedback.trim() : "",
+    source: "ai"
+  };
+}
+
+async function evaluateEssayAnswer(questionItem, userAnswer) {
+  try {
+    const aiResult = await gradeEssayWithGemini(questionItem, userAnswer, { allowPrompt: true });
+    if (aiResult && typeof aiResult.isCorrect === "boolean") {
+      return aiResult;
+    }
+  } catch (error) {
+    // عند فشل الخدمة الخارجية نعود للتصحيح المحلي مباشرة.
+  }
+
+  return {
+    isCorrect: isEssayAnswerCorrect(questionItem, userAnswer),
+    feedback: "تم استخدام التصحيح المحلي.",
+    source: "local"
+  };
 }
 
 function getAudioContext() {
@@ -1619,6 +1784,7 @@ function saveState(){
     score,
     answered,
     selectedAnswer,
+    selectedAnswerIsCorrect,
     quizQuestionsSnapshot: isQuizActive ? questions : null,
     elapsedTimeMs: getElapsedTimeMs(),
     finished: Array.isArray(questions) && questions.length > 0 && index >= questions.length
@@ -1700,6 +1866,7 @@ function startQuiz(qs){
   score = 0;
   answered = false;
   selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
   startQuizTimer({ reset: true });
   title.textContent = QUIZ_STEP_TITLE;
   setLessonWatermarkVisibility(true);
@@ -1733,7 +1900,20 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
   updateQuizMetaUI();
 }
 
-function renderEssayAnsweredState(answerText, isCorrect, forceNextButton = false) {
+function showEssayPendingState() {
+  let feedbackNode = content.querySelector(".essay-feedback");
+  if (!feedbackNode) {
+    feedbackNode = document.createElement("div");
+    feedbackNode.className = "essay-feedback";
+    content.appendChild(feedbackNode);
+  }
+
+  feedbackNode.classList.remove("is-correct", "is-wrong");
+  feedbackNode.classList.add("is-pending");
+  feedbackNode.textContent = "جار التصحيح بالذكاء الاصطناعي...";
+}
+
+function renderEssayAnsweredState(answerText, isCorrect, forceNextButton = false, feedbackText = "", resultSource = "local") {
   const answerInput = document.getElementById("essayAnswerInput");
   const submitButton = document.getElementById("essaySubmitBtn");
 
@@ -1754,9 +1934,12 @@ function renderEssayAnsweredState(answerText, isCorrect, forceNextButton = false
     content.appendChild(feedbackNode);
   }
 
+  feedbackNode.classList.remove("is-pending");
   feedbackNode.classList.toggle("is-correct", isCorrect);
   feedbackNode.classList.toggle("is-wrong", !isCorrect);
-  feedbackNode.textContent = isCorrect ? "إجابة صحيحة." : "إجابة تحتاج مراجعة.";
+  const defaultFeedback = isCorrect ? "إجابة صحيحة." : "إجابة تحتاج مراجعة.";
+  const sourceLabel = resultSource === "ai" ? " (تصحيح AI)" : " (تصحيح محلي)";
+  feedbackNode.textContent = `${feedbackText && feedbackText.trim() ? feedbackText.trim() : defaultFeedback}${sourceLabel}`;
 
   const currentQuestion = questions[index];
   const modelAnswer = currentQuestion && typeof currentQuestion.modelAnswer === "string"
@@ -1774,10 +1957,11 @@ function renderEssayAnsweredState(answerText, isCorrect, forceNextButton = false
   updateQuizMetaUI();
 }
 
-function submitEssayAnswer() {
+async function submitEssayAnswer() {
   if (answered) return;
 
   const answerInput = document.getElementById("essayAnswerInput");
+  const submitButton = document.getElementById("essaySubmitBtn");
   if (!answerInput) return;
 
   const userAnswer = answerInput.value.trim();
@@ -1786,11 +1970,27 @@ function submitEssayAnswer() {
     return;
   }
 
-  answered = true;
-  selectedAnswer = userAnswer;
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+  answerInput.disabled = true;
+  showEssayPendingState();
 
   const currentQuestion = questions[index];
-  const isCorrect = isEssayAnswerCorrect(currentQuestion, userAnswer);
+  if (!currentQuestion || currentQuestion.type !== "essay") {
+    answerInput.disabled = false;
+    if (submitButton) submitButton.disabled = false;
+    return;
+  }
+
+  const evaluation = await evaluateEssayAnswer(currentQuestion, userAnswer);
+  const isCorrect = Boolean(evaluation && evaluation.isCorrect);
+  const feedbackText = evaluation && typeof evaluation.feedback === "string" ? evaluation.feedback : "";
+  const resultSource = evaluation && evaluation.source === "ai" ? "ai" : "local";
+
+  answered = true;
+  selectedAnswer = userAnswer;
+  selectedAnswerIsCorrect = isCorrect;
 
   if (isCorrect) {
     score++;
@@ -1799,7 +1999,7 @@ function submitEssayAnswer() {
     playWrongSound();
   }
 
-  renderEssayAnsweredState(userAnswer, isCorrect);
+  renderEssayAnsweredState(userAnswer, isCorrect, false, feedbackText, resultSource);
 
   saveState();
   if (isCorrect) {
@@ -1861,6 +2061,7 @@ function loadQuestion(){
 
   answered = false;
   selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
   nextBtn.style.display = "none";
 
   const q = questions[index];
@@ -1910,6 +2111,7 @@ function selectAnswer(i){
 
   const correct = questions[index].correct;
   const isCorrect = i === correct;
+  selectedAnswerIsCorrect = isCorrect;
 
   if (isCorrect) {
     score++;
@@ -1933,6 +2135,7 @@ function goToNextQuestion() {
   index++;
   answered = false;
   selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
 
   if(index < questions.length){
     loadQuestion();
@@ -1954,6 +2157,9 @@ function restoreState(){
   // تجهيز التطبيق دائمًا من الجذر
   title.textContent = ROOT_TITLE;
   quizTitle = "";
+  answered = false;
+  selectedAnswer = null;
+  selectedAnswerIsCorrect = null;
   showMenu(data);
   backBtn.style.display = "none";
   nextBtn.style.display = "none";
@@ -2061,6 +2267,9 @@ function restoreState(){
         const savedSelectedAnswer = typeof saved.selectedAnswer === "number" || typeof saved.selectedAnswer === "string"
           ? saved.selectedAnswer
           : null;
+        const savedSelectedAnswerIsCorrect = typeof saved.selectedAnswerIsCorrect === "boolean"
+          ? saved.selectedAnswerIsCorrect
+          : null;
         if (saved.finished) {
           stopQuizTimer();
         } else {
@@ -2079,15 +2288,19 @@ function restoreState(){
           if (wasAnswered && savedSelectedAnswer !== null) {
             answered = true;
             selectedAnswer = savedSelectedAnswer;
+            selectedAnswerIsCorrect = savedSelectedAnswerIsCorrect;
             const currentQuestion = questions[index];
             if (currentQuestion && currentQuestion.type === "essay" && typeof savedSelectedAnswer === "string") {
-              const isCorrect = isEssayAnswerCorrect(currentQuestion, savedSelectedAnswer);
-              renderEssayAnsweredState(savedSelectedAnswer, isCorrect, true);
+              const isCorrect = savedSelectedAnswerIsCorrect === null
+                ? isEssayAnswerCorrect(currentQuestion, savedSelectedAnswer)
+                : savedSelectedAnswerIsCorrect;
+              renderEssayAnsweredState(savedSelectedAnswer, isCorrect, true, "", "local");
             } else if (typeof savedSelectedAnswer === "number") {
               renderAnsweredState(savedSelectedAnswer, true);
             } else {
               answered = false;
               selectedAnswer = null;
+              selectedAnswerIsCorrect = null;
             }
           }
         }
