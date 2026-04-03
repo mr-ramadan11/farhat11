@@ -841,8 +841,17 @@ const poeticScienceSuccessQuestions = [
     type: "essay",
     sectionTitle: "ثالثاً: أسئلة مقالية",
     question: "إلى أين تصل إذا واظبت بالعلوم كما فهمت من الأبيات؟",
-    acceptedAnswers: ["إلى المقام الجليل", "المقام الجليل", "تصل إلى المعالي", "إلى العلا"],
-    keywordGroups: [["المقام", "المعالي", "العلا"], ["الجليل", "رفيع"]],
+    acceptedAnswers: [
+      "إلى المقام الجليل",
+      "المقام الجليل",
+      "تصل إلى المعالي",
+      "إلى العلا",
+      "إلى المكانة العالية",
+      "المكانة العالية",
+      "إلى المنزلة الرفيعة",
+      "المنزلة الرفيعة"
+    ],
+    keywordGroups: [["المقام", "المعالي", "العلا", "المكانة", "المنزلة"], ["الجليل", "رفيع", "عالية", "سامية"]],
     modelAnswer: "إلى المقام الجليل."
   },
   {
@@ -914,10 +923,14 @@ const URL_ROUTE_PARAM = "r";
 const URL_PATH_LEVEL_PARAMS = [URL_STAGE_PARAM, URL_TERM_PARAM, URL_GRADE_PARAM, URL_UNIT_PARAM, URL_LESSON_PARAM];
 const LEGACY_URL_VIEW_PARAM = "view";
 const LEGACY_URL_PATH_PARAM = "p";
-const GEMINI_API_KEY_STORAGE_KEY = "gemini-api-key";
 const GEMINI_MODEL_NAME = "gemini-2.0-flash";
 const GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
-let hasPromptedForGeminiApiKey = false;
+const GEMINI_PROXY_URL = typeof window !== "undefined" && typeof window.GEMINI_PROXY_URL === "string"
+  ? window.GEMINI_PROXY_URL.trim()
+  : "";
+const GEMINI_DIRECT_API_KEY = typeof window !== "undefined" && typeof window.GEMINI_API_KEY === "string"
+  ? window.GEMINI_API_KEY.trim()
+  : "";
 let audioContext = null;
 let quizTimerStartedAt = null;
 let quizElapsedBeforeCurrentRun = 0;
@@ -1152,15 +1165,49 @@ function isCloseText(first, second) {
   return coverage >= 0.75;
 }
 
+const SEMANTIC_SYNONYMS = {
+  "المقام": ["المكانه", "المنزله", "المرتبه", "العلا", "المعالي"],
+  "المكانه": ["المقام", "المنزله", "المرتبه", "الرفعه"],
+  "المنزله": ["المقام", "المكانه", "المرتبه", "الرفعه"],
+  "المرتبه": ["المقام", "المكانه", "المنزله"],
+  "الجليل": ["الرفيع", "العالي", "العاليه", "السامي", "العظيم"],
+  "الرفيع": ["الجليل", "العالي", "العاليه", "السامى", "السامي"],
+  "العالي": ["الجليل", "الرفيع", "السامي", "الكبير"],
+  "العاليه": ["الجليل", "الرفيع", "الساميه", "السامي"],
+  "العلا": ["المعالي", "الرفعه", "المقام"],
+  "المعالي": ["العلا", "الرفعه", "المقام", "المكانه"]
+};
+
+function getSemanticVariants(rawWord) {
+  const normalizedWord = normalizeArabicText(rawWord);
+  if (!normalizedWord) return [];
+
+  const variants = new Set([normalizedWord]);
+  const directSynonyms = Array.isArray(SEMANTIC_SYNONYMS[normalizedWord]) ? SEMANTIC_SYNONYMS[normalizedWord] : [];
+  directSynonyms.forEach((synonym) => {
+    const normalizedSynonym = normalizeArabicText(synonym);
+    if (normalizedSynonym) variants.add(normalizedSynonym);
+  });
+
+  return [...variants];
+}
+
 function doesAnswerContainKeyword(answerWords, rawKeyword) {
   const keyword = normalizeArabicText(rawKeyword);
   if (!keyword) return false;
+  const keywordVariants = getSemanticVariants(keyword);
 
   return answerWords.some((word) => {
-    if (word === keyword) return true;
-    if (word.includes(keyword) || keyword.includes(word)) return true;
-    const maxDistance = Math.max(1, Math.floor(keyword.length / 4));
-    return levenshteinDistance(word, keyword) <= maxDistance;
+    const answerWordVariants = getSemanticVariants(word);
+
+    return answerWordVariants.some((answerVariant) => {
+      return keywordVariants.some((keywordVariant) => {
+        if (answerVariant === keywordVariant) return true;
+        if (answerVariant.includes(keywordVariant) || keywordVariant.includes(answerVariant)) return true;
+        const maxDistance = Math.max(1, Math.floor(keywordVariant.length / 4));
+        return levenshteinDistance(answerVariant, keywordVariant) <= maxDistance;
+      });
+    });
   });
 }
 
@@ -1188,35 +1235,37 @@ function isEssayAnswerCorrect(questionItem, userAnswer) {
   return matchesKeywordGroups(normalizedUserAnswer, questionItem.keywordGroups);
 }
 
-function getGeminiApiKey({ allowPrompt = false } = {}) {
-  if (typeof window !== "undefined" && typeof window.GEMINI_API_KEY === "string" && window.GEMINI_API_KEY.trim()) {
-    return window.GEMINI_API_KEY.trim();
+function getGeminiApiKey() {
+  return GEMINI_DIRECT_API_KEY || "";
+}
+
+async function gradeEssayWithProxy(questionItem, userAnswer) {
+  if (!GEMINI_PROXY_URL) return null;
+
+  const response = await fetch(GEMINI_PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      question: questionItem.question,
+      userAnswer,
+      acceptedAnswers: Array.isArray(questionItem.acceptedAnswers) ? questionItem.acceptedAnswers : [],
+      keywordGroups: Array.isArray(questionItem.keywordGroups) ? questionItem.keywordGroups : [],
+      modelAnswer: typeof questionItem.modelAnswer === "string" ? questionItem.modelAnswer : ""
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Essay proxy request failed with status ${response.status}`);
   }
 
-  try {
-    const savedApiKey = localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY);
-    if (typeof savedApiKey === "string" && savedApiKey.trim()) {
-      return savedApiKey.trim();
-    }
-  } catch (error) {
-    // تجاهل أخطاء التخزين المحلي.
-  }
+  const payload = await response.json();
+  if (!payload || typeof payload !== "object" || typeof payload.isCorrect !== "boolean") return null;
 
-  if (!allowPrompt || hasPromptedForGeminiApiKey || typeof window === "undefined") {
-    return "";
-  }
-
-  hasPromptedForGeminiApiKey = true;
-  const enteredApiKey = window.prompt("للتصحيح بالذكاء الاصطناعي (Gemini)، أدخل مفتاح API. اتركه فارغًا لاستخدام التصحيح المحلي.", "");
-  if (!enteredApiKey || !enteredApiKey.trim()) return "";
-
-  const safeApiKey = enteredApiKey.trim();
-  try {
-    localStorage.setItem(GEMINI_API_KEY_STORAGE_KEY, safeApiKey);
-  } catch (error) {
-    // تجاهل أخطاء التخزين المحلي.
-  }
-  return safeApiKey;
+  return {
+    isCorrect: payload.isCorrect,
+    feedback: typeof payload.feedback === "string" ? payload.feedback.trim() : "",
+    source: "ai"
+  };
 }
 
 function extractJsonFromText(rawText) {
@@ -1283,8 +1332,8 @@ function buildGeminiEssayPrompt(questionItem, userAnswer) {
   ].join("\n");
 }
 
-async function gradeEssayWithGemini(questionItem, userAnswer, { allowPrompt = true } = {}) {
-  const apiKey = getGeminiApiKey({ allowPrompt });
+async function gradeEssayWithGemini(questionItem, userAnswer) {
+  const apiKey = getGeminiApiKey();
   if (!apiKey) return null;
 
   const requestUrl = `${GEMINI_API_BASE_URL}/${encodeURIComponent(GEMINI_MODEL_NAME)}:generateContent?key=${encodeURIComponent(apiKey)}`;
@@ -1325,18 +1374,45 @@ async function gradeEssayWithGemini(questionItem, userAnswer, { allowPrompt = tr
 }
 
 async function evaluateEssayAnswer(questionItem, userAnswer) {
+  const localJudgement = isEssayAnswerCorrect(questionItem, userAnswer);
+
   try {
-    const aiResult = await gradeEssayWithGemini(questionItem, userAnswer, { allowPrompt: true });
-    if (aiResult && typeof aiResult.isCorrect === "boolean") {
-      return aiResult;
+    const proxyResult = await gradeEssayWithProxy(questionItem, userAnswer);
+    if (proxyResult && typeof proxyResult.isCorrect === "boolean") {
+      if (!proxyResult.isCorrect && localJudgement) {
+        return {
+          isCorrect: true,
+          feedback: `${proxyResult.feedback ? `${proxyResult.feedback} ` : ""}تم قبول الإجابة بناءً على التحليل الدلالي.`,
+          source: "ai"
+        };
+      }
+      return proxyResult;
+    }
+  } catch (error) {
+    // نواصل إلى البدائل التالية.
+  }
+
+  try {
+    const directGeminiResult = await gradeEssayWithGemini(questionItem, userAnswer);
+    if (directGeminiResult && typeof directGeminiResult.isCorrect === "boolean") {
+      if (!directGeminiResult.isCorrect && localJudgement) {
+        return {
+          isCorrect: true,
+          feedback: `${directGeminiResult.feedback ? `${directGeminiResult.feedback} ` : ""}تم قبول الإجابة بناءً على التحليل الدلالي.`,
+          source: "ai"
+        };
+      }
+      return directGeminiResult;
     }
   } catch (error) {
     // عند فشل الخدمة الخارجية نعود للتصحيح المحلي مباشرة.
   }
 
   return {
-    isCorrect: isEssayAnswerCorrect(questionItem, userAnswer),
-    feedback: "تم استخدام التصحيح المحلي.",
+    isCorrect: localJudgement,
+    feedback: (GEMINI_PROXY_URL || GEMINI_DIRECT_API_KEY)
+      ? "تعذر الوصول إلى خدمة التصحيح بالذكاء الاصطناعي، فتم استخدام التصحيح المحلي."
+      : "التصحيح المحلي مفعّل لأن خدمة الذكاء الاصطناعي غير مُعدة.",
     source: "local"
   };
 }

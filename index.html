@@ -121,6 +121,17 @@
   <div class="watermark-lesson signature" aria-hidden="true">أ/ رمضان فرحات</div>
 </div>
 
+<script>
+  /*
+    إعدادات تصحيح الأسئلة المقالية بالذكاء الاصطناعي:
+    1) الأفضل (آمن): ضع رابط Proxy خاص بك، والطلاب لن يحتاجوا أي مفاتيح.
+       مثال: window.GEMINI_PROXY_URL = "/api/essay-grade";
+    2) بديل سريع (أقل أمانًا): ضع مفتاح Gemini مباشرة.
+       مثال: window.GEMINI_API_KEY = "PASTE_YOUR_SERVER_KEY";
+  */
+  window.GEMINI_PROXY_URL = "/api/essay-grade";
+  window.GEMINI_API_KEY = "";
+</script>
 <script src="script.js"></script>
 </body>
 </html>
