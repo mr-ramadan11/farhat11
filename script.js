@@ -780,6 +780,76 @@ const poeticTextQuestions = [
 
 poeticTextQuestions.quizTitle = "أسئلة على النص الشعري (مصر لنا منذ القدم)";
 
+const poeticScienceSuccessQuestions = [
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "مرادف كلمة \"تَبْغِي\" في البيت الأول هو:", answers: ["تترك وتتخلى", "تطلب وتريد", "ترفض وتمنع"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "المقصود بـ \"الْمَعَالِي\" كما جاء في سياق النص:", answers: ["الثروات الطائلة", "الأنساب العريقة", "الدرجات الرفيعة"], correct: 2 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "بماذا وصف الشاعر العلم في البيت الأول؟ بأنه:", answers: ["أهدى سبيلاً", "صديقاً", "دليلاً"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "معنى فعل الأمر \"وَاظِبْ\" في البيت الثاني:", answers: ["داوم واستمر", "توقف قليلاً", "فكر وتأمل"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "مضاد كلمة \"الْجِدِّ\" في النص هو:", answers: ["النشاط", "الكسل", "التسرع"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "جمع كلمة \"دَهْرًا\" كما ورد في الشرح:", answers: ["دواهير", "دهرانات", "دهور وأدهر"], correct: 2 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "كلمة \"وَلُوعًا\" تعني أن تكون للعلم:", answers: ["شديد التعلق به", "شديد الكراهية له", "دائم النسيان له"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "\"تَبْغِي المَعَالِي\" تعبير مجازي يصور المعالي بـ:", answers: ["حيوان مفترس", "شيء مادي يتسابق عليه", "نبات ينمو ببطء"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "ما العلاقة بين الشطر الثاني (تَرْقَ الْمَقَامَ الْجَلِيلَا) والشطر الأول (كُنْ بِالْعُلُومِ وَلُوعًا) في البيت الثالث؟", answers: ["تعليل لما قبله", "نتيجة لما قبله", "تضاد مع ما قبله"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "المدة الزمنية التي نصح الشاعر بطلب العلم خلالها هي:", answers: ["دهرًا طويلاً", "شهرًا قصيرًا", "يومًا واحدًا"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "«تَلْقَ الْجَزَاءَ الْجَمِيلَا» تعبير يدل على:", answers: ["ضياع الجهد والتعب دون الوصول إلى نتيجة.", "أنَّ مَن يُتعب نفسه في طلب العلم سيفوز فوزًا كبيرًا.", "الحصول على مكافأة بسيطة ومؤقتة."], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "ماذا طلب الشاعر أن نفعل بأنفسنا في سبيل العلم في البيت الرابع؟", answers: ["نريحها", "نتعبها", "نهملها"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "مفرد كلمة \"الْعُلُومِ\" الواردة في البيت الثالث:", answers: ["العالِم", "العَلَم", "العِلْم"], correct: 2 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "الكلمات (سبيلا، طويلا، الجليلا) تتفق في نهايتها لتعطي:", answers: ["جرساً موسيقياً", "تضاداً يبرز المعنى", "ترادفاً لغوياً"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "\"لَوْلَا العُلَا مَا سَهِرْنَا\" تعبير يدل على أن المجد يحتاج إلى:", answers: ["حظ وصدفة", "نوم عميق", "صبر وسهر"], correct: 2 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "وفقاً للبيت الأخير، الدافع الأساسي لسهر الليالي الطويلة هو:", answers: ["الوصول للعُلا", "الخوف من الفشل", "كثرة الواجبات"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "من قائل هذا النص:", answers: ["حافظ إبراهيم", "محمد عبد المطلب", "أحمد شوقي"], correct: 1 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "التعبير بـ \"العِلْمُ أَهْدَى سَبِيلَا\" يصور العلم بـ:", answers: ["طريق يسير فيه الإنسان", "سلاح يحارب به", "كنز مدفون"], correct: 0 },
+  { type: "choice", sectionTitle: "أولاً: اختر الإجابة الصحيحة", question: "في البيت الرابع، العلاقة بين قوله (تَلْقَ الْجَزَاءَ الْجَمِيلَا) وما قبله (وَأَتْعِبِ النَّفْسَ فِيهَا) هي علاقة:", answers: ["ترادف", "تفصيل", "نتيجة"], correct: 2 },
+
+  { type: "true_false", sectionTitle: "ثانياً: أسئلة (صح وخطأ)", question: "استخدم الشاعر التعبير الحقيقي المباشر وليس المجازي في قوله \"تبغي المعالي\".", answers: ["صح", "خطأ"], correct: 1, explanation: "التعبير مجازي." },
+  { type: "true_false", sectionTitle: "ثانياً: أسئلة (صح وخطأ)", question: "يأمرنا الشاعر في الأبيات بالراحة التامة وعدم إجهاد النفس في المذاكرة.", answers: ["صح", "خطأ"], correct: 1, explanation: "يأمرنا بإتعاب النفس في طلب العلم." },
+  { type: "true_false", sectionTitle: "ثانياً: أسئلة (صح وخطأ)", question: "التعبير \"ترق المقام الجليلا\" يمثل النتيجة لما قبله \"كن بالعلوم ولوعا\".", answers: ["صح", "خطأ"], correct: 0, explanation: "العبارة صحيحة؛ فالشطر الثاني نتيجة لما قبله." },
+  { type: "true_false", sectionTitle: "ثانياً: أسئلة (صح وخطأ)", question: "معنى \"أهدى\" في قوله \"أهدى سبيلا\" هي \"أضل\".", answers: ["صح", "خطأ"], correct: 1, explanation: "المقصود: أرشد أو أفضل." },
+
+  {
+    type: "essay",
+    sectionTitle: "ثالثاً: أسئلة مقالية",
+    question: "بم يتحقق الوصول للمعالي؟",
+    acceptedAnswers: ["بطلب العلم", "بالعلم", "بطلب العلم والاجتهاد", "بالجد والاجتهاد في طلب العلم"],
+    keywordGroups: [["طلب", "بالطلب", "اجتهاد", "جد"], ["العلم"]],
+    modelAnswer: "بطلب العلم."
+  },
+  {
+    type: "essay",
+    sectionTitle: "ثالثاً: أسئلة مقالية",
+    question: "تشابه نهايات الكلمات يعطينا...؟",
+    acceptedAnswers: ["جرسًا موسيقيًا", "جرسا موسيقيا", "جرس موسيقي", "جرسًا موسيقيًا يطرب الأذن"],
+    keywordGroups: [["جرس"], ["موسيقي"]],
+    modelAnswer: "جرسًا موسيقيًا."
+  },
+  {
+    type: "essay",
+    sectionTitle: "ثالثاً: أسئلة مقالية",
+    question: "مَن الذي يتعب نفسه كما فهمت من الأبيات؟",
+    acceptedAnswers: ["طالب العلم", "من يطلب العلم", "الطالب المجتهد", "طالب مجتهد"],
+    keywordGroups: [["طالب", "الطالب", "من يطلب", "المجتهد"], ["العلم"]],
+    modelAnswer: "طالب العلم."
+  },
+  {
+    type: "essay",
+    sectionTitle: "ثالثاً: أسئلة مقالية",
+    question: "إلى أين تصل إذا واظبت بالعلوم كما فهمت من الأبيات؟",
+    acceptedAnswers: ["إلى المقام الجليل", "المقام الجليل", "تصل إلى المعالي", "إلى العلا"],
+    keywordGroups: [["المقام", "المعالي", "العلا"], ["الجليل", "رفيع"]],
+    modelAnswer: "إلى المقام الجليل."
+  },
+  {
+    type: "essay",
+    sectionTitle: "ثالثاً: أسئلة مقالية",
+    question: "بم صوّر الشاعر المعالي؟",
+    acceptedAnswers: ["بشيء مادي", "بشيء مادي يتسابق عليه", "بشيء محسوس"],
+    keywordGroups: [["شيء", "شيئا"], ["مادي", "محسوس"]],
+    modelAnswer: "بشيء مادي."
+  }
+];
+
+poeticScienceSuccessQuestions.quizTitle = "أسئلة على النص الشعري (العلم طريق النجاح)";
+
 if (
   data["المرحلة الابتدائية"] &&
   data["المرحلة الابتدائية"][TERM_TWO] &&
@@ -808,6 +878,7 @@ if (
     primaryGradeFourUnitTwo["القواعد النحوية الثاني"] = grammarDualAndMasculinePluralQuestions;
     primaryGradeFourUnitTwo["القواعد الإملائية"] = softAlifInNounsQuestions;
     primaryGradeFourUnitTwo["التعبير الكتابي"] = writingPlaceDescriptionQuestions;
+    primaryGradeFourUnitTwo["النص الشعري"] = poeticScienceSuccessQuestions;
   }
 }
 
@@ -851,9 +922,48 @@ function shuffleArrayInPlace(items) {
   return items;
 }
 
+function toTrimmedStringArray(rawList) {
+  if (!Array.isArray(rawList)) return [];
+  return rawList
+    .filter((item) => typeof item === "string")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}
+
+function normalizeKeywordGroups(rawGroups) {
+  if (!Array.isArray(rawGroups)) return [];
+  return rawGroups
+    .map((group) => toTrimmedStringArray(Array.isArray(group) ? group : [group]))
+    .filter((group) => group.length > 0);
+}
+
 function cloneQuizQuestion(rawQuestion) {
   if (!rawQuestion || typeof rawQuestion !== "object") return null;
-  if (typeof rawQuestion.question !== "string" || !Array.isArray(rawQuestion.answers)) return null;
+  if (typeof rawQuestion.question !== "string") return null;
+
+  const type = rawQuestion.type === "essay"
+    ? "essay"
+    : rawQuestion.type === "true_false"
+      ? "true_false"
+      : "choice";
+  const sectionTitle = typeof rawQuestion.sectionTitle === "string" ? rawQuestion.sectionTitle : "";
+
+  if (type === "essay") {
+    const acceptedAnswers = toTrimmedStringArray(rawQuestion.acceptedAnswers);
+    const keywordGroups = normalizeKeywordGroups(rawQuestion.keywordGroups);
+    if (!acceptedAnswers.length && !keywordGroups.length) return null;
+
+    return {
+      type,
+      question: rawQuestion.question,
+      acceptedAnswers: [...acceptedAnswers],
+      keywordGroups: keywordGroups.map((group) => [...group]),
+      modelAnswer: typeof rawQuestion.modelAnswer === "string" ? rawQuestion.modelAnswer.trim() : "",
+      sectionTitle
+    };
+  }
+
+  if (!Array.isArray(rawQuestion.answers)) return null;
 
   const answers = rawQuestion.answers.filter((answer) => typeof answer === "string");
   if (!answers.length) return null;
@@ -863,14 +973,20 @@ function cloneQuizQuestion(rawQuestion) {
     : 0;
 
   return {
+    type,
     question: rawQuestion.question,
     answers: [...answers],
     correct,
-    sectionTitle: typeof rawQuestion.sectionTitle === "string" ? rawQuestion.sectionTitle : ""
+    explanation: typeof rawQuestion.explanation === "string" ? rawQuestion.explanation.trim() : "",
+    sectionTitle
   };
 }
 
 function shuffleAnswersForQuestion(questionItem) {
+  if (!questionItem || questionItem.type === "essay" || !Array.isArray(questionItem.answers)) {
+    return { ...questionItem };
+  }
+
   const options = questionItem.answers.map((answer, index) => ({
     answer,
     isCorrect: index === questionItem.correct
@@ -938,6 +1054,126 @@ function normalizeQuizQuestionsSnapshot(snapshot, expectedLength = null) {
   if (Number.isInteger(expectedLength) && expectedLength >= 0 && normalized.length !== expectedLength) return null;
 
   return normalized;
+}
+
+function normalizeArabicText(value) {
+  if (typeof value !== "string") return "";
+  return value
+    .toLowerCase()
+    .replace(/[ًٌٍَُِّْـ]/g, "")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/[^a-z0-9\u0600-\u06FF\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function splitNormalizedWords(value) {
+  const normalized = normalizeArabicText(value);
+  if (!normalized) return [];
+  return normalized.split(" ").filter(Boolean);
+}
+
+function levenshteinDistance(first, second) {
+  if (first === second) return 0;
+  if (!first.length) return second.length;
+  if (!second.length) return first.length;
+
+  const prev = new Array(second.length + 1);
+  const curr = new Array(second.length + 1);
+
+  for (let j = 0; j <= second.length; j++) {
+    prev[j] = j;
+  }
+
+  for (let i = 1; i <= first.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= second.length; j++) {
+      const cost = first[i - 1] === second[j - 1] ? 0 : 1;
+      curr[j] = Math.min(
+        prev[j] + 1,
+        curr[j - 1] + 1,
+        prev[j - 1] + cost
+      );
+    }
+
+    for (let j = 0; j <= second.length; j++) {
+      prev[j] = curr[j];
+    }
+  }
+
+  return prev[second.length];
+}
+
+function isCloseText(first, second) {
+  const normalizedFirst = normalizeArabicText(first);
+  const normalizedSecond = normalizeArabicText(second);
+  if (!normalizedFirst || !normalizedSecond) return false;
+  if (normalizedFirst === normalizedSecond) return true;
+
+  const shortestLength = Math.min(normalizedFirst.length, normalizedSecond.length);
+  if (shortestLength >= 3 && (normalizedFirst.includes(normalizedSecond) || normalizedSecond.includes(normalizedFirst))) {
+    return true;
+  }
+
+  const distance = levenshteinDistance(normalizedFirst, normalizedSecond);
+  const similarity = 1 - (distance / Math.max(normalizedFirst.length, normalizedSecond.length));
+  if (similarity >= 0.76) return true;
+
+  const answerWords = splitNormalizedWords(normalizedFirst);
+  const expectedWords = splitNormalizedWords(normalizedSecond);
+  if (!answerWords.length || !expectedWords.length) return false;
+
+  const commonWords = expectedWords.filter((expectedWord) => {
+    return answerWords.some((answerWord) => {
+      if (answerWord === expectedWord) return true;
+      if (answerWord.includes(expectedWord) || expectedWord.includes(answerWord)) return true;
+      const maxDistance = Math.max(1, Math.floor(expectedWord.length / 4));
+      return levenshteinDistance(answerWord, expectedWord) <= maxDistance;
+    });
+  });
+
+  const coverage = commonWords.length / expectedWords.length;
+  return coverage >= 0.75;
+}
+
+function doesAnswerContainKeyword(answerWords, rawKeyword) {
+  const keyword = normalizeArabicText(rawKeyword);
+  if (!keyword) return false;
+
+  return answerWords.some((word) => {
+    if (word === keyword) return true;
+    if (word.includes(keyword) || keyword.includes(word)) return true;
+    const maxDistance = Math.max(1, Math.floor(keyword.length / 4));
+    return levenshteinDistance(word, keyword) <= maxDistance;
+  });
+}
+
+function matchesKeywordGroups(answerText, keywordGroups) {
+  const normalizedGroups = normalizeKeywordGroups(keywordGroups);
+  if (!normalizedGroups.length) return false;
+
+  const answerWords = splitNormalizedWords(answerText);
+  if (!answerWords.length) return false;
+
+  return normalizedGroups.every((group) => group.some((keyword) => doesAnswerContainKeyword(answerWords, keyword)));
+}
+
+function isEssayAnswerCorrect(questionItem, userAnswer) {
+  if (!questionItem || questionItem.type !== "essay") return false;
+
+  const normalizedUserAnswer = normalizeArabicText(userAnswer);
+  if (!normalizedUserAnswer) return false;
+
+  const acceptedAnswers = toTrimmedStringArray(questionItem.acceptedAnswers);
+  if (acceptedAnswers.some((acceptedAnswer) => isCloseText(normalizedUserAnswer, acceptedAnswer))) {
+    return true;
+  }
+
+  return matchesKeywordGroups(normalizedUserAnswer, questionItem.keywordGroups);
 }
 
 function getAudioContext() {
@@ -1471,7 +1707,10 @@ function startQuiz(qs){
 }
 
 function renderAnsweredState(selectedIndex, forceNextButton = false){
-  const correct = questions[index].correct;
+  const currentQuestion = questions[index];
+  if (!currentQuestion || !Array.isArray(currentQuestion.answers)) return;
+
+  const correct = currentQuestion.correct;
   const btns = document.querySelectorAll("#content button");
 
   btns.forEach((b,idx) => {
@@ -1483,8 +1722,91 @@ function renderAnsweredState(selectedIndex, forceNextButton = false){
     b.disabled = true;
   });
 
+  if (currentQuestion.explanation) {
+    const explanationNode = document.createElement("p");
+    explanationNode.className = "answer-explanation";
+    explanationNode.textContent = `التصحيح: ${currentQuestion.explanation}`;
+    content.appendChild(explanationNode);
+  }
+
   nextBtn.style.display = forceNextButton || selectedIndex !== correct ? "block" : "none";
   updateQuizMetaUI();
+}
+
+function renderEssayAnsweredState(answerText, isCorrect, forceNextButton = false) {
+  const answerInput = document.getElementById("essayAnswerInput");
+  const submitButton = document.getElementById("essaySubmitBtn");
+
+  if (answerInput) {
+    answerInput.value = answerText;
+    answerInput.disabled = true;
+    answerInput.readOnly = true;
+  }
+
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
+  let feedbackNode = content.querySelector(".essay-feedback");
+  if (!feedbackNode) {
+    feedbackNode = document.createElement("div");
+    feedbackNode.className = "essay-feedback";
+    content.appendChild(feedbackNode);
+  }
+
+  feedbackNode.classList.toggle("is-correct", isCorrect);
+  feedbackNode.classList.toggle("is-wrong", !isCorrect);
+  feedbackNode.textContent = isCorrect ? "إجابة صحيحة." : "إجابة تحتاج مراجعة.";
+
+  const currentQuestion = questions[index];
+  const modelAnswer = currentQuestion && typeof currentQuestion.modelAnswer === "string"
+    ? currentQuestion.modelAnswer.trim()
+    : "";
+
+  if (modelAnswer) {
+    const modelAnswerNode = document.createElement("p");
+    modelAnswerNode.className = "essay-model-answer";
+    modelAnswerNode.textContent = `نموذج إجابة مقترح: ${modelAnswer}`;
+    feedbackNode.appendChild(modelAnswerNode);
+  }
+
+  nextBtn.style.display = forceNextButton || !isCorrect ? "block" : "none";
+  updateQuizMetaUI();
+}
+
+function submitEssayAnswer() {
+  if (answered) return;
+
+  const answerInput = document.getElementById("essayAnswerInput");
+  if (!answerInput) return;
+
+  const userAnswer = answerInput.value.trim();
+  if (!userAnswer) {
+    answerInput.focus();
+    return;
+  }
+
+  answered = true;
+  selectedAnswer = userAnswer;
+
+  const currentQuestion = questions[index];
+  const isCorrect = isEssayAnswerCorrect(currentQuestion, userAnswer);
+
+  if (isCorrect) {
+    score++;
+    playCorrectSound();
+  } else {
+    playWrongSound();
+  }
+
+  renderEssayAnsweredState(userAnswer, isCorrect);
+
+  saveState();
+  if (isCorrect) {
+    setTimeout(() => {
+      goToNextQuestion();
+    }, 1000);
+  }
 }
 
 function getQuizMetaHtml() {
@@ -1547,6 +1869,25 @@ function loadQuestion(){
 
   content.innerHTML = `${headingHtml}${sectionHeadingHtml}${getQuizMetaHtml()}<h3 class="question">${q.question}</h3>`;
 
+  if (q.type === "essay") {
+    const answerInput = document.createElement("textarea");
+    answerInput.id = "essayAnswerInput";
+    answerInput.className = "essay-answer-input";
+    answerInput.rows = 4;
+    answerInput.placeholder = "اكتب إجابتك هنا...";
+
+    const submitButton = document.createElement("button");
+    submitButton.id = "essaySubmitBtn";
+    submitButton.className = "essay-submit-btn";
+    submitButton.textContent = "تحقق من الإجابة";
+    submitButton.onclick = submitEssayAnswer;
+
+    content.appendChild(answerInput);
+    content.appendChild(submitButton);
+    saveState();
+    return;
+  }
+
   q.answers.forEach((a,i) => {
     const btn = document.createElement("button");
     btn.textContent = a;
@@ -1562,6 +1903,7 @@ function loadQuestion(){
 // اختيار الإجابة
 function selectAnswer(i){
   if(answered) return;
+  if (!questions[index] || questions[index].type === "essay") return;
 
   answered = true;
   selectedAnswer = i;
@@ -1716,7 +2058,9 @@ function restoreState(){
         index = Number.isInteger(saved.index) ? Math.max(0, Math.min(saved.index, maxSavedIndex)) : 0;
         score = Number.isInteger(saved.score) ? Math.max(0, saved.score) : 0;
         const wasAnswered = Boolean(saved.answered);
-        const savedSelectedAnswer = Number.isInteger(saved.selectedAnswer) ? saved.selectedAnswer : null;
+        const savedSelectedAnswer = typeof saved.selectedAnswer === "number" || typeof saved.selectedAnswer === "string"
+          ? saved.selectedAnswer
+          : null;
         if (saved.finished) {
           stopQuizTimer();
         } else {
@@ -1735,7 +2079,16 @@ function restoreState(){
           if (wasAnswered && savedSelectedAnswer !== null) {
             answered = true;
             selectedAnswer = savedSelectedAnswer;
-            renderAnsweredState(savedSelectedAnswer, true);
+            const currentQuestion = questions[index];
+            if (currentQuestion && currentQuestion.type === "essay" && typeof savedSelectedAnswer === "string") {
+              const isCorrect = isEssayAnswerCorrect(currentQuestion, savedSelectedAnswer);
+              renderEssayAnsweredState(savedSelectedAnswer, isCorrect, true);
+            } else if (typeof savedSelectedAnswer === "number") {
+              renderAnsweredState(savedSelectedAnswer, true);
+            } else {
+              answered = false;
+              selectedAnswer = null;
+            }
           }
         }
       } else {
